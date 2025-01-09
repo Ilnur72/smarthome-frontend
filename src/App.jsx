@@ -12,6 +12,7 @@ import { jwtDecode } from "jwt-decode";
 import BuildingDetail from "./pages/building/components/DetailBuilding";
 import AddEntrance from "./pages/building/components/AddEntrance";
 import Login from "./pages/Login/Login";
+import AddCamera from "./pages/camera/components/AddCamera";
 
 function App() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/building" element={<Building />} />
         <Route path="/building/add-home" element={<AddHome />} />
         <Route path="/building/entrance" element={<AddEntrance />} />
+        <Route path="/building/add-camera" element={<AddCamera />} />
         <Route path="/building/detail" element={<BuildingDetail />} />
         <Route path="/entrance" element={<Entrance />} />
       </Route>

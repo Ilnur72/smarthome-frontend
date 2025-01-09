@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  Button,
   IconButton,
   Paper,
   Table,
@@ -18,6 +19,7 @@ import iconDelete from "../../../assets/ActionIcon/delete.svg";
 import iconEdit from "../../../assets/ActionIcon/edit.svg";
 import iconView from "../../../assets/ActionIcon/view.svg";
 import EntranceModal from "./EntranceModal";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function AddEntrance() {
   const navigate = useNavigate();
@@ -30,7 +32,6 @@ function AddEntrance() {
       .get(`/entrance?filters[building_id]=${buildingIdFromParams}`)
       .then((res) => res.data)
   );
-  console.log(data);
 
   // useEffect(() => {
   //   if (data) {
@@ -46,6 +47,13 @@ function AddEntrance() {
     );
   return (
     <div className="">
+      <button
+        type="button"
+        onClick={() => navigate(`/building/detail?buildingId=${buildingIdFromParams}`)}
+        className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
+      >
+        <ArrowBackIcon fontSize="medium" />
+      </button>
       <div className="flex items-center justify-between pt-4 pl-4">
         <strong className="font-bold text-base text-primary">
           Total: {data.data.total}

@@ -6,9 +6,7 @@ const buildingSlice = createSlice({
     buildingId: null,
   },
   reducers: {
-    setBuildingId: (state, action) => {
-      console.log(action);
-      
+    setBuildingId: (state, action) => {      
       state.buildingId = action.payload; // building_id ni yangilash
     },
   },

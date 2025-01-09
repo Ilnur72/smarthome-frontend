@@ -45,8 +45,6 @@ function Building() {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(isLoading);
-  console.log(data);
   if (isLoading)
     return (
       <div className="flex items-center justify-center h-2/3">
@@ -77,12 +75,12 @@ function Building() {
         <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell
+              {/* <TableCell
                 sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
                 align="left"
               >
                 Shirkat nomi
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
                 align="center"
@@ -135,7 +133,7 @@ function Building() {
                   "&:last-child td, &:last-child th": { border: 0 },
                 }}
               >
-                <TableCell
+                {/* <TableCell
                   sx={{
                     fontSize: 16,
                     fontWeight: 600,
@@ -145,7 +143,7 @@ function Building() {
                   align="left"
                 >
                   {item.operator_name}
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   sx={{
                     fontSize: 16,

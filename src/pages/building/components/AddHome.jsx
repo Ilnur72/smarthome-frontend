@@ -69,7 +69,6 @@ function AddHome() {
   };
 
   const onSubmit = async (formData) => {
-    console.log(formData);
     delete formData.region_id;
     const result = await axios.post("/building", {
       ...formData,
@@ -78,7 +77,6 @@ function AddHome() {
       entrance_count: +formData.entrance_count,
     });
     if (result.data.success) {
-      console.log(result);
       dispatch(setBuildingId(result.data.data.id));
       queryClient.invalidateQueries("building");
       navigate(`/building/entrance?buildingId=${result.data.data.id}`);

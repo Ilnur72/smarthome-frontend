@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Commet } from "react-loading-indicators";
 import axios from "axios";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 function BuildingDetail({ building }) {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const buildingIdFromParams = queryParams.get("buildingId");
-  console.log(buildingIdFromParams);
 
   const { data, error, isLoading, refetch } = useQuery(
     "building-detail",
@@ -18,7 +19,6 @@ function BuildingDetail({ building }) {
     //   staleTime: 0,
     // }
   );
-  console.log(data);
   if (isLoading)
     return (
       <div className="flex items-center justify-center h-2/3">
@@ -26,7 +26,6 @@ function BuildingDetail({ building }) {
       </div>
     );
   const address = data?.data.address;
-  console.log(address);
 
   return (
     <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
@@ -47,6 +46,22 @@ function BuildingDetail({ building }) {
         <strong>Podyezdlar soni:</strong> {data.data.entrance_count}
       </Typography>
       <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
+        {/* <button
+          type="button"
+          onClick={() => navigate("/building")}
+          className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
+        >
+        </button> */}
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() =>
+            navigate(`/building`)
+          }
+        >
+          <ArrowBackIcon fontSize="medium" />
+          Back
+        </Button>
         <Button
           variant="contained"
           color="primary"
@@ -60,7 +75,7 @@ function BuildingDetail({ building }) {
           variant="contained"
           color="secondary"
           onClick={() =>
-            navigate(`/building/camera?buildingId=${data.data.id}`)
+            navigate(`/building/add-camera?buildingId=${data.data.id}`)
           }
         >
           Camera
