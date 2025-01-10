@@ -23,7 +23,6 @@ import { Commet, OrbitProgress } from "react-loading-indicators";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import EditModal1 from "./components/EditModal1";
 import EditModal from "./components/EditModal";
 // import EditModal from "./components/EditModal";
 
