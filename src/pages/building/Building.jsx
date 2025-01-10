@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   IconButton,
@@ -23,21 +23,30 @@ import { Commet, OrbitProgress } from "react-loading-indicators";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import EditModal1 from "./components/EditModal1";
+import EditModal from "./components/EditModal";
+// import EditModal from "./components/EditModal";
 
 function Building() {
   const [page, setPage] = React.useState(1);
   const [row, setRow] = React.useState(10);
-  const [loadingDelete, setLoadingDelete] = React.useState(false);
   const navigate = useNavigate();
+  const [showBuilding, setShowBuilding] = React.useState({ isOpen: false });
 
-  // const { data, loading, refetch } = useAxios({
-  //   method: "get",
-  //   url: "/building",
-  // });
+  async function showData(id) {
+    const { data } = await axios.get(`/building/${id}`);
+
+    setShowBuilding({ isOpen: true, data: data.data });
+  }
 
   const { data, error, isLoading, refetch } = useQuery(
     "building",
-    () => axios.get("/building").then((res) => res.data),
+
+    () =>
+      axios
+        .get(`/building?page[offset]=${page}&page[limit]=${row}`)
+        .then((res) => res.data)
+        .catch((e) => console.log(e)),
     {
       staleTime: 1000 * 60 * 5,
       cacheTime: 1000 * 60 * 10,
@@ -45,12 +54,19 @@ function Building() {
       refetchOnWindowFocus: false,
     }
   );
+
+  React.useEffect(() => {
+    refetch();
+    if (data?.data.buildings.length === 0 && page !== 1) setPage(page - 1);
+  }, [page, row, refetch]);
+
   if (isLoading)
     return (
       <div className="flex items-center justify-center h-2/3">
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
+
   return (
     <div>
       {/* <CreateForm refetch={refetch} />
@@ -59,6 +75,7 @@ function Building() {
       setShowUser={setShowUser}
       refetch={refetch}
     /> */}
+
       <div className="flex items-center justify-between pt-4 pl-4">
         <strong className="font-bold text-base text-primary">
           Total: {data?.total}
@@ -70,7 +87,12 @@ function Building() {
         /> */}
         </div>
       </div>
-
+  
+      <EditModal
+        showBuilding={showBuilding}
+        setShowBuilding={setShowBuilding}
+        refetch={refetch}
+      />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
           <TableHead>
@@ -241,7 +263,7 @@ function Building() {
                   </IconButton>
                   <IconButton
                     onClick={() => {
-                      // navigate(`/building/entrance?buildingId=${item.id}`);
+                      showData(item.id);
                     }}
                     aria-label="edit"
                     size="medium"
@@ -300,7 +322,7 @@ function Building() {
         <Stack spacing={2}>
           <Pagination
             onChange={(_, page) => setPage(page)}
-            count={data?.pageInfo && Math.ceil(data.pageInfo?.total / row)}
+            count={data?.data && Math.ceil(data.data?.total / row)}
             variant="outlined"
             shape="rounded"
             page={page}

@@ -1,6 +1,12 @@
 import {
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Pagination,
   Paper,
+  Select,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -14,15 +20,21 @@ import axios from "axios";
 import iconDelete from "../../assets/ActionIcon/delete.svg";
 import iconEdit from "../../assets/ActionIcon/edit.svg";
 import iconView from "../../assets/ActionIcon/view.svg";
+import React from "react";
 
 function Entrance() {
-
+  const [page, setPage] = React.useState(1);
+  const [row, setRow] = React.useState(10);
   const { data, isLoading, refetch } = useQuery("entrance", () =>
     axios
-      .get(`/entrance`)
+      .get(`/entrance?page[offset]=${page}&page[limit]=${row}`)
       .then((res) => res.data)
   );
 
+  React.useEffect(() => {
+    refetch();
+    if (data?.data.entrance.length === 0 && page !== 1) setPage(page - 1);
+  }, [page, row, refetch]);
 
   if (isLoading)
     return (
@@ -239,6 +251,33 @@ function Entrance() {
           </TableBody>
         </Table>
       </TableContainer>
+      <div align="center" className="flex justify-center items-center py-2">
+        <Stack spacing={2}>
+          <Pagination
+            onChange={(_, page) => setPage(page)}
+            count={data?.data && Math.ceil(data.data?.total / row)}
+            variant="outlined"
+            shape="rounded"
+            page={page}
+          />
+        </Stack>
+        <FormControl sx={{ width: "80px" }}>
+          <InputLabel size="small" id="demo-simple-select-label">
+            Row
+          </InputLabel>
+          <Select
+            size="small"
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={row}
+            label="Row"
+            onChange={(e) => setRow(e.target.value)}
+          >
+            <MenuItem value={5}>5</MenuItem>
+            <MenuItem value={10}>10</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
     </div>
   );
 }

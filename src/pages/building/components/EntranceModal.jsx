@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Modal } from "@mui/material";
+import { Button,  Modal } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../../store/slices/modalSlice";
