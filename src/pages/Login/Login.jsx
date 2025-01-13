@@ -21,7 +21,7 @@ const Login = ({ refetchData }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState } = useForm();
 
   const submit = async (dataValue) => {
     try {
@@ -36,7 +36,7 @@ const Login = ({ refetchData }) => {
         reset();
         refetchData();
       }
-    } catch (error) {      
+    } catch (error) {
       toast.error(error.response?.message);
     }
   };
@@ -111,8 +111,9 @@ const Login = ({ refetchData }) => {
               marginTop: 4,
             }}
             variant="contained"
+            disabled={formState.isSubmitting}
           >
-            Login
+            {formState.isSubmitting ? "Loading" : "Login"}
           </Button>
         </form>
       </div>

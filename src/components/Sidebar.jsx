@@ -5,16 +5,26 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import FaxIcon from "@mui/icons-material/Fax";
 import CameraIcon from "@mui/icons-material/PhotoCameraFront";
 import MenuIcon from "@mui/icons-material/Menu";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Logout } from "@mui/icons-material";
+import { LogOutIcon } from "lucide-react";
 
 function Sidebar() {
+  const navigate = useNavigate();
   let links = [
     { img: ApartmentIcon, link: "Building", url: `/building` },
-    { img: FaxIcon, link: "Intercom", url: "/intercom" },
-    { img: CameraIcon, link: "Camera", url: `/camera` },
-    { img: MenuIcon, link: "Menu", url: `/menu` },
+    // { img: FaxIcon, link: "Intercom", url: "/intercom" },
+    // { img: CameraIcon, link: "Camera", url: `/camera` },
+    // { img: Logout, l ink: "Logout", url: `/login` },
   ];
+  const handleLogout = () => {
+    // Tokenni localStorage yoki sessionStorage'dan o'chirish
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
 
+    // Foydalanuvchini login sahifasiga yo'naltirish
+    navigate("/login");
+  };
   return (
     <div
       style={{ height: "100vh" }}
@@ -22,7 +32,7 @@ function Sidebar() {
     >
       <h1 className="text-lg font-bold text-blue-600">Project Name</h1>
       <p className="text-gray-500">Category</p>
-      <ul className="mt-4">
+      <ul className="mt-4 flex flex-col gap-4">
         {links.map((item, index) => (
           <NavLink key={index} to={item.url}>
             {({ isActive }) => (
@@ -37,6 +47,13 @@ function Sidebar() {
             )}
           </NavLink>
         ))}
+        <li
+          className="flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer"
+          onClick={handleLogout}
+        >
+          <LogOutIcon className="text-gray-500" />
+          <span className="ml-2 text-primary">Logout</span>
+        </li>
       </ul>
     </div>
   );
