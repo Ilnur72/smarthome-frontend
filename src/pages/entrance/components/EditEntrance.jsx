@@ -24,7 +24,6 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
     setShowEntrance({ isOpen: false });
     setLoading(false);
   };
-  console.log(showEntrance);
 
   return (
     <Modal

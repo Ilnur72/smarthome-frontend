@@ -69,7 +69,7 @@ function AddBuilding() {
   };
 
   const onSubmit = async (formData) => {
-    if (formData.apartments_count <= formData.entrance_count) {
+    if (+formData.apartments_count <= +formData.entrance_count) {
       setError("apartments_count", {
         type: "manual",
         message: "Xonadonlar soni noto'gri",
