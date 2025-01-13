@@ -30,13 +30,13 @@ function Camera() {
   const [row, setRow] = React.useState(10);
   const [isOpen, setIsOpen] = React.useState(false);
   const navigate = useNavigate();
-  
+
   const queryParams = new URLSearchParams(location.search);
   const buildingIdFromParams = queryParams.get("buildingId");
 
   const { data, isLoading, refetch } = useQuery("camera", () =>
     axios
-      .get(`/camera?page[offset]=${page}&page[limit]=${row}`)
+      .get(`/camera?filters[building_id]=${buildingIdFromParams}&page[offset]=${page}&page[limit]=${row}`)
       .then((res) => res.data)
   );
   React.useEffect(() => {
