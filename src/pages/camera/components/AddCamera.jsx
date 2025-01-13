@@ -36,8 +36,8 @@ function CameraModal({ refetch, buildingId, isOpen, setIsOpen }) {
     if (result.data.success) {
       setSelectedEntrance([]);
       reset();
-      setIsOpen(false)
-      refetch()
+      setIsOpen(false);
+      refetch();
     }
   };
   if (isLoading) return;
@@ -102,7 +102,12 @@ function CameraModal({ refetch, buildingId, isOpen, setIsOpen }) {
           <label className="block text-sm font-medium text-gray-700">
             Podyezdlar
           </label>
-          <div className="grid grid-cols-3 gap-2 p-8">
+          <div
+            className="grid grid-cols-3 gap-2 p-8"
+            style={{
+              gridTemplateColumns: `repeat(auto-fit, minmax(100px, 1fr))`,
+            }}
+          >
             {data.data?.entrance.map((entrance, index) => (
               <div key={index} className="flex items-center justify-center">
                 <label className="group relative inline-flex cursor-pointer items-center">

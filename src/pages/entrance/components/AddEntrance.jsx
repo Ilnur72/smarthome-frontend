@@ -6,7 +6,7 @@ import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 
-function EntranceModal({ refetch, buildingId, setIsOpen, isOpen }) {
+function AddEntrance({ refetch, buildingId, setIsOpen, isOpen }) {
   // const { isOpen, isClose } = useSelector((state) => state.modal);
   const { register, handleSubmit, reset, formState } = useForm();
 
@@ -141,4 +141,4 @@ function EntranceModal({ refetch, buildingId, setIsOpen, isOpen }) {
   );
 }
 
-export default EntranceModal;
+export default AddEntrance;

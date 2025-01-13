@@ -3,11 +3,33 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useQuery } from "react-query";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
-function EditModal({ showBuilding, setShowBuilding, refetch }) {
+// Leaflet marker setup
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+});
+
+function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
   if (!showBuilding.isOpen) return null;
   const [districts, setDistricts] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [position, setPosition] = React.useState([
+    showBuilding.data?.location?.lat || 41.2995, // Default to Tashkent if no location
+    showBuilding.data?.location?.lng || 69.2401,
+  ]);
   const { register, handleSubmit, reset } = useForm();
 
   const { data, error, isLoading } = useQuery("region", () =>
@@ -29,6 +51,18 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
     }
   };
 
+  const MapClick = () => {
+    useMapEvents({
+      click(e) {
+        const { lat, lng } = e.latlng;
+        setPosition([lat, lng]);
+        // Update the location in the form
+        reset({ ...reset(), location: `${lat}, ${lng}` });
+      },
+    });
+    return null;
+  };
+
   const onSubmit = async (formData) => {
     setLoading(true);
     await axios.put(`/building/${showBuilding.data.id}`, {
@@ -37,6 +71,7 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
       floor: +formData.floor,
       entrance_count: +formData.entrance_count,
       district_id: formData.district_id || showBuilding.data.address.districtId,
+      location: { lat: position[0], lng: position[1] }, // Update location
     });
     refetch();
     reset();
@@ -58,7 +93,7 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
       >
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block mb-2">Viloyat*</label>
+            <label className="block mb-2">Viloyat</label>
             <select
               {...register("region_id")}
               required
@@ -79,7 +114,7 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
           </div>
 
           <div>
-            <label className="block mb-2">Tuman*</label>
+            <label className="block mb-2">Tuman</label>
             <select
               {...register("district_id")}
               required
@@ -99,7 +134,7 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
           </div>
 
           <div>
-            <label className="block mb-2">Manzil*</label>
+            <label className="block mb-2">Manzil</label>
             <input
               type="text"
               placeholder="Muqimiy123"
@@ -111,7 +146,7 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
           </div>
 
           <div>
-            <label className="block mb-2">Qavatlar soni*</label>
+            <label className="block mb-2">Qavatlar soni</label>
             <input
               type="number"
               placeholder="4"
@@ -125,7 +160,7 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
           </div>
 
           <div>
-            <label className="block mb-2">Podyezdlar soni*</label>
+            <label className="block mb-2">Podyezdlar soni</label>
             <input
               type="number"
               placeholder="20"
@@ -138,7 +173,7 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
           </div>
 
           <div>
-            <label className="block mb-2">Xonadonlar soni*</label>
+            <label className="block mb-2">Xonadonlar soni</label>
             <input
               type="number"
               placeholder="100"
@@ -149,7 +184,29 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
               className="border p-2 rounded w-full"
             />
           </div>
+
         </div>
+          <div>
+            <label className="block mb-2">Location</label>
+            <div style={{ height: "200px", width: "100%" }}>
+              <MapContainer
+                center={position}
+                zoom={13}
+                style={{ height: "100%", width: "100%" }}
+              >
+                <MapClick />
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={position}>
+                  <Popup>
+                    Tanlangan joy: {position[0]}, {position[1]}
+                  </Popup>
+                </Marker>
+              </MapContainer>
+            </div>
+          </div>
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"
@@ -181,4 +238,4 @@ function EditModal({ showBuilding, setShowBuilding, refetch }) {
   );
 }
 
-export default EditModal;
+export default EditBuilding;

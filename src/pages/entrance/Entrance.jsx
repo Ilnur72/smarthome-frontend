@@ -15,17 +15,26 @@ import { Commet } from "react-loading-indicators";
 import { useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import axios from "axios";
-import iconDelete from "../../../assets/ActionIcon/delete.svg";
-import iconEdit from "../../../assets/ActionIcon/edit.svg";
-import iconView from "../../../assets/ActionIcon/view.svg";
-import EntranceModal from "./EntranceModal";
+import iconDelete from "../../assets/ActionIcon/delete.svg";
+import iconEdit from "../../assets/ActionIcon/edit.svg";
+import iconView from "../../assets/ActionIcon/view.svg";
+import AddEntrance from "./components/AddEntrance";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import EditEntrance from "./components/EditEntrance";
 
-function AddEntrance() {
+function Entrance() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
   const queryParams = new URLSearchParams(location.search);
   const buildingIdFromParams = queryParams.get("buildingId");
+
+  const [showEntrance, setShowEntrance] = React.useState({ isOpen: false });
+
+  async function showData(id) {
+    const { data } = await axios.get(`/entrance/${id}`);
+
+    setShowEntrance({ isOpen: true, data: data.data });
+  }
 
   const { data, error, isLoading, refetch } = useQuery("entrance", () =>
     axios
@@ -73,18 +82,18 @@ function AddEntrance() {
         <strong className="font-bold text-base text-primary">
           Total: {data.data.total}
         </strong>
-        <div className="flex items-center pb-2">
-          {/* <Sort
-          filterAndSort={filterAndSort}
-          setFilterAndSort={setFilterAndSort}
-        /> */}
-        </div>
+        <div className="flex items-center pb-2"></div>
       </div>
-      <EntranceModal
+      <AddEntrance
         refetch={refetch}
         buildingId={buildingIdFromParams}
         setIsOpen={setIsOpen}
         isOpen={isOpen}
+      />
+      <EditEntrance
+        showEntrance={showEntrance}
+        setShowEntrance={setShowEntrance}
+        refetch={refetch}
       />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
@@ -193,17 +202,7 @@ function AddEntrance() {
                 >
                   {item.intercom_password}
                 </TableCell>
-                {/* <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
-                >
-                  {item.apartments_count}
-                </TableCell> */}
+
                 <TableCell
                   sx={{
                     fontSize: 14,
@@ -213,7 +212,7 @@ function AddEntrance() {
                   }}
                   align="center"
                 >
-                  <IconButton
+                  {/* <IconButton
                     // onClick={() => {
                     //   navigate(`/users/${item.id}`);
                     // }}
@@ -232,11 +231,11 @@ function AddEntrance() {
                     }}
                   >
                     <img src={iconView} alt="" />
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
-                    // onClick={() => {
-                    //   showData(item.id);
-                    // }}
+                    onClick={() => {
+                      showData(item.id);
+                    }}
                     aria-label="edit"
                     size="medium"
                     sx={{
@@ -285,4 +284,4 @@ function AddEntrance() {
   );
 }
 
-export default AddEntrance;
+export default Entrance;

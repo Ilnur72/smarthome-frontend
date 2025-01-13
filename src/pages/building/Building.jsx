@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   FormControl,
   IconButton,
@@ -18,13 +18,11 @@ import {
 import iconDelete from "../../assets/ActionIcon/delete.svg";
 import iconEdit from "../../assets/ActionIcon/edit.svg";
 import iconView from "../../assets/ActionIcon/view.svg";
-import { useAxios } from "../../hooks/useAxios";
-import { Commet, OrbitProgress } from "react-loading-indicators";
+import { Commet } from "react-loading-indicators";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import EditModal from "./components/EditModal";
-// import EditModal from "./components/EditModal";
+import EditBuilding from "./components/EditBuilding";
 
 function Building() {
   const [page, setPage] = React.useState(1);
@@ -67,12 +65,6 @@ function Building() {
     );
   return (
     <div>
-      {/* <CreateForm refetch={refetch} />
-    <UpdateForm
-      showUser={showUser}
-      setShowUser={setShowUser}
-      refetch={refetch}
-    /> */}
       <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
         <h2 className="text-xl font-bold">Uylar</h2>
         <div className="flex items-center">
@@ -91,15 +83,10 @@ function Building() {
         <strong className="font-bold text-base text-primary">
           Total: {data?.data.total}
         </strong>
-        <div className="flex items-center pb-2">
-          {/* <Sort
-          filterAndSort={filterAndSort}
-          setFilterAndSort={setFilterAndSort}
-        /> */}
-        </div>
+        <div className="flex items-center pb-2"></div>
       </div>
 
-      <EditModal
+      <EditBuilding
         showBuilding={showBuilding}
         setShowBuilding={setShowBuilding}
         refetch={refetch}

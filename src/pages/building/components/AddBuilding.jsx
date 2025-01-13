@@ -36,7 +36,7 @@ const center = {
   lng: 69.2401,
 };
 
-function AddHome() {
+function AddBuilding() {
   const queryClient = useQueryClient();
   const { register, handleSubmit, setValue, formState, setError } = useForm();
   const [districts, setDistricts] = useState([]);
@@ -248,4 +248,4 @@ function AddHome() {
   );
 }
 
-export default AddHome;
+export default AddBuilding;
