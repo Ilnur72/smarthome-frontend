@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 import { setBuildingId } from "../../../store/slices/buildingSlice";
 import { useQuery, useQueryClient } from "react-query";
 import { saveState } from "../../../Utils/storage";
+import { toast } from "react-toastify";
 // import { LocationPicker } from "./Map";
 // Leaflet uchun marker tuzatish
 delete L.Icon.Default.prototype._getIconUrl;
@@ -37,7 +38,7 @@ const center = {
 
 function AddHome() {
   const queryClient = useQueryClient();
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, formState, setError } = useForm();
   const [districts, setDistricts] = useState([]);
   const [position, setPosition] = useState([center.lat, center.lng]);
   const navigate = useNavigate();
@@ -56,25 +57,32 @@ function AddHome() {
     }
   };
 
-  // Xarita bosilganda markerning joylashuvini o'zgartirish
   const MapClick = () => {
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng;
         setPosition([lat, lng]);
-        setValue("location", `${lat}, ${lng}`); // Location qiymatini formaga yozish
+        setValue("location", `${lat}, ${lng}`);
       },
     });
     return null;
   };
 
   const onSubmit = async (formData) => {
+    if (formData.apartments_count <= formData.entrance_count) {
+      setError("apartments_count", {
+        type: "manual",
+        message: "Xonadonlar soni noto'gri",
+      });
+      return;
+    }
     delete formData.region_id;
     const result = await axios.post("/building", {
       ...formData,
       floor: +formData.floor,
       apartments_count: +formData.apartments_count,
       entrance_count: +formData.entrance_count,
+      location: { lat: position[0], lng: position[1] },
     });
     if (result.data.success) {
       dispatch(setBuildingId(result.data.data.id));
@@ -123,7 +131,6 @@ function AddHome() {
             </select>
           </div>
 
-          {/* Tuman tanlash */}
           <div>
             <label className="block mb-2">Tuman*</label>
             <select
@@ -148,7 +155,7 @@ function AddHome() {
             <label className="block mb-2">Manzil*</label>
             <input
               type="text"
-              placeholder="Muqimiy123"
+              placeholder="Amir Temur shox ko'chasi 14a"
               {...register("address")}
               required={true}
               className="border p-2 rounded w-full"
@@ -159,7 +166,7 @@ function AddHome() {
             <label className="block mb-2">Qavatlar soni*</label>
             <input
               type="number"
-              placeholder="4"
+              placeholder="5"
               {...register("floor")}
               required={true}
               max={20}
@@ -172,7 +179,7 @@ function AddHome() {
             <label className="block mb-2">Podyezdlar soni*</label>
             <input
               type="number"
-              placeholder="20"
+              placeholder="4"
               {...register("entrance_count")}
               required={true}
               min={1}
@@ -188,17 +195,22 @@ function AddHome() {
               {...register("apartments_count")}
               required={true}
               min={1}
-              className="border p-2 rounded w-full"
+              className={`border p-2 rounded w-full ${
+                formState.errors.apartments_count ? "border-red-500" : ""
+              }`}
             />
+            {formState.errors.apartments_count && (
+              <p className="text-red-500 text-sm mt-1">
+                {formState.errors.apartments_count.message}
+              </p>
+            )}
           </div>
 
-          {/* Location (Xarita) */}
           <div className="col-span-2">
-            {/* <LocationPicker></LocationPicker> */}
-            {/* <label className="block mb-2">Location*</label> */}
-            {/* <div style={{ height: "500px", width: "100%" }}> */}
-            {/* <input type="" /> */}
-            {/* <MapContainer
+            <label className="block mb-2">Location*</label>
+            <div style={{ height: "350px", width: "100%" }}>
+              <input type="" />
+              <MapContainer
                 center={[41.2995, 69.2401]}
                 zoom={13}
                 style={{ height: "100%", width: "100%" }}
@@ -213,33 +225,22 @@ function AddHome() {
                     Tanlangan joy: {position[0]}, {position[1]}
                   </Popup>
                 </Marker>
-              </MapContainer> */}
-            {/* </div> */}
+              </MapContainer>{" "}
+              *
+            </div>
           </div>
         </div>
 
-        {/* Tugmalar */}
-        {/* <div className="flex justify-between mt-4">
-          <button
-            onClick={() => navigate("/entrance")}
-            type="button"
-            className="bg-teal-500 text-white px-4 py-2 rounded w-full mr-2"
-          >
-            Podyezdar
-          </button>
-          <button
-            type="button"
-            className="bg-teal-500 text-white px-4 py-2 rounded w-full ml-2"
-          >
-            Camenerlar
-          </button>
-        </div> */}
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-8">
           <button
             type="submit"
             className="bg-primary-500 text-white px-4 py-2 rounded"
+            disabled={formState.isSubmitting}
           >
-            Next <KeyboardTabIcon fontSize="medium" />
+            {formState.isSubmitting ? "Loading..." : "Submit"}
+            {formState.isSubmitting ? null : (
+              <KeyboardTabIcon fontSize="medium" />
+            )}
           </button>
         </div>
       </form>

@@ -45,7 +45,7 @@ function EntranceModal({ register, handleSubmit, reset, refetch, buildingId }) {
             <label className="block mb-2">Podyezd nomi*</label>
             <input
               type="text"
-              placeholder="9a dom"
+              placeholder="padyez nomi"
               {...register("name")}
               required={true}
               className="border p-2 rounded w-full"
@@ -55,7 +55,7 @@ function EntranceModal({ register, handleSubmit, reset, refetch, buildingId }) {
             <label className="block mb-2">Kvartira soni*</label>
             <input
               type="number"
-              placeholder="32"
+              placeholder="raqam kiriting"
               {...register("apartments_count")}
               required={true}
               className="border p-2 rounded w-full"

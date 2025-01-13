@@ -65,7 +65,7 @@ function Building() {
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
-
+console.log(data.data)
   return (
     <div>
       {/* <CreateForm refetch={refetch} />
@@ -77,7 +77,7 @@ function Building() {
 
       <div className="flex items-center justify-between pt-4 pl-4">
         <strong className="font-bold text-base text-primary">
-          Total: {data?.total}
+          Total: {data?.data.total}
         </strong>
         <div className="flex items-center pb-2">
           {/* <Sort
