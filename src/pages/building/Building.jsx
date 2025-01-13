@@ -65,7 +65,6 @@ function Building() {
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
-console.log(data.data)
   return (
     <div>
       {/* <CreateForm refetch={refetch} />
@@ -74,7 +73,20 @@ console.log(data.data)
       setShowUser={setShowUser}
       refetch={refetch}
     /> */}
-
+      <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
+        <h2 className="text-xl font-bold">Uylar</h2>
+        <div className="flex items-center">
+          <button
+            onClick={() => {
+              setShowBuilding({ isOpen: true });
+              navigate("add-home");
+            }}
+            className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
+          >
+            Uy qo'shish
+          </button>
+        </div>
+      </div>
       <div className="flex items-center justify-between pt-4 pl-4">
         <strong className="font-bold text-base text-primary">
           Total: {data?.data.total}
@@ -86,7 +98,7 @@ console.log(data.data)
         /> */}
         </div>
       </div>
-  
+
       <EditModal
         showBuilding={showBuilding}
         setShowBuilding={setShowBuilding}

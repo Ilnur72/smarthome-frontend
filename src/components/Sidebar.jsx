@@ -2,7 +2,6 @@
 
 import React from "react";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import FaxIcon from "@mui/icons-material/Fax";
 import CameraIcon from "@mui/icons-material/PhotoCameraFront";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,7 +10,6 @@ import { NavLink } from "react-router-dom";
 function Sidebar() {
   let links = [
     { img: ApartmentIcon, link: "Building", url: `/building` },
-    { img: MeetingRoomIcon, link: "Entrance", url: "/entrance" },
     { img: FaxIcon, link: "Intercom", url: "/intercom" },
     { img: CameraIcon, link: "Camera", url: `/camera` },
     { img: MenuIcon, link: "Menu", url: `/menu` },

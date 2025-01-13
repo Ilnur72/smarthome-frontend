@@ -23,10 +23,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function AddEntrance() {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = React.useState(false);
   const queryParams = new URLSearchParams(location.search);
-  const buildingIdFromParams = queryParams.get("buildingId"); // URL dan building ID ni olish
+  const buildingIdFromParams = queryParams.get("buildingId");
 
-  const { register, handleSubmit, reset } = useForm();
   const { data, error, isLoading, refetch } = useQuery("entrance", () =>
     axios
       .get(`/entrance?filters[building_id]=${buildingIdFromParams}`)
@@ -47,9 +47,24 @@ function AddEntrance() {
     );
   return (
     <div className="">
+      <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
+        <h2 className="text-xl font-bold">Podyezlar</h2>
+        <div className="flex items-center">
+          <button
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
+          >
+            Podyez qo'shish
+          </button>
+        </div>
+      </div>
       <button
         type="button"
-        onClick={() => navigate(`/building/detail?buildingId=${buildingIdFromParams}`)}
+        onClick={() =>
+          navigate(`/building/detail?buildingId=${buildingIdFromParams}`)
+        }
         className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
       >
         <ArrowBackIcon fontSize="medium" />
@@ -66,11 +81,10 @@ function AddEntrance() {
         </div>
       </div>
       <EntranceModal
-        register={register}
-        handleSubmit={handleSubmit}
-        reset={reset}
         refetch={refetch}
         buildingId={buildingIdFromParams}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
       />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">

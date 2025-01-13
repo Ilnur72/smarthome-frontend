@@ -6,18 +6,16 @@ import { Commet } from "react-loading-indicators";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Button, Modal } from "@mui/material";
 
-function NewIntercom() {
-  const { register, handleSubmit, reset } = useForm();
+function CameraModal({ refetch, buildingId, isOpen, setIsOpen }) {
+  const { register, handleSubmit, reset, formState } = useForm();
   const navigate = useNavigate();
   const [selectedEntrance, setSelectedEntrance] = React.useState([]);
-  const queryParams = new URLSearchParams(location.search);
 
-  const buildingIdFromParams = queryParams.get("buildingId");
-
-  const { data, error, isLoading, refetch } = useQuery("entrance", () =>
+  const { data, error, isLoading } = useQuery("entrance", () =>
     axios
-      .get(`/entrance?filters[building_id]=${buildingIdFromParams}`)
+      .get(`/entrance?filters[building_id]=${buildingId}`)
       .then((res) => res.data)
   );
 
@@ -33,31 +31,38 @@ function NewIntercom() {
     const result = await axios.post("/camera", {
       ...data,
       entrance_ids: selectedEntrance,
-      building_id: buildingIdFromParams,
+      building_id: buildingId,
     });
     if (result.data.success) {
       setSelectedEntrance([]);
       reset();
+      setIsOpen(false)
+      refetch()
     }
   };
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center h-2/3">
-        <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
-      </div>
-    );
+  if (isLoading) return;
   return (
-    <div className="p-6 bg-white rounded-lg">
-      <button
-        type="button"
-        onClick={() =>
-          navigate(`/building/detail?buildingId=${buildingIdFromParams}`)
-        }
-        className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
+    <Modal
+      hideBackdrop={false}
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      {/* <div className="p-6 bg-white rounded-lg"> */}
+      {/* <button
+          type="button"
+          onClick={() =>
+            navigate(`/building/detail?buildingId=${buildingId}`)
+          }
+          className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
+        >
+          <ArrowBackIcon fontSize="medium" />
+        </button> */}
+      <form
+        className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 w-96 p-10 rounded-xl "
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <ArrowBackIcon fontSize="medium" />
-      </button>
-      <form className="w-1/2 mx-auto pt-10" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 gap-4">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
@@ -116,7 +121,7 @@ function NewIntercom() {
                       </span>
                     </div>
                     <div
-                      className={`flex h-6 w-6 items-center justify-center rounded-full border-black border-2 bg-white transition-all ${
+                      className={`flex h-6 w-6 items-center justify-center rounded-full border-black border-2 transition-all ${
                         selectedEntrance.includes(entrance.id)
                           ? "border-black bg-black "
                           : "text-gray-600"
@@ -136,15 +141,39 @@ function NewIntercom() {
             ))}
           </div>
         </div>
-        <button
-          type="submit"
-          className="mt-4 bg-primary-500 text-white px-4 py-2 rounded"
-        >
-          Saqlash
-        </button>
+        <div className="flex justify-between mt-4">
+          <Button
+            variant="outlined"
+            onClick={() => setIsOpen(false)}
+            type="button"
+            // className="bg-slate-400 text-white px-4 py-2 rounded"
+            sx={{
+              // paddingY: "16px",
+              color: "#00BDD6FF",
+              borderColor: "#00BDD6FF",
+              borderRadius: "4px",
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={formState.isSubmitting}
+            sx={{
+              background: "#00BDD6FF",
+              color: "#fff",
+              // paddingY: "16px",
+              borderRadius: "4px",
+            }}
+          >
+            {formState.isSubmitting ? "Loading..." : "submit"}
+          </Button>
+        </div>
       </form>
-    </div>
+      {/* </div> */}
+    </Modal>
   );
 }
 
-export default NewIntercom;
+export default CameraModal;

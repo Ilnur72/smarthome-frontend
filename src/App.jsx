@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import Building from "./pages/building/Building";
 import MainLayout from "./layout/MainLayout";
 import AddHome from "./pages/building/components/AddHome";
-import Entrance from "./pages/entrance/Entrance";
 import { useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom/dist";
 import { loadState } from "./Utils/storage";
@@ -13,6 +12,7 @@ import BuildingDetail from "./pages/building/components/DetailBuilding";
 import AddEntrance from "./pages/building/components/AddEntrance";
 import Login from "./pages/Login/Login";
 import AddCamera from "./pages/camera/components/AddCamera";
+import Camera from "./pages/camera/Camera";
 
 function App() {
   const navigate = useNavigate();
@@ -32,9 +32,9 @@ function App() {
         <Route path="/building" element={<Building />} />
         <Route path="/building/add-home" element={<AddHome />} />
         <Route path="/building/entrance" element={<AddEntrance />} />
-        <Route path="/building/add-camera" element={<AddCamera />} />
+        <Route path="/building/camera" element={<Camera />} />
         <Route path="/building/detail" element={<BuildingDetail />} />
-        <Route path="/entrance" element={<Entrance />} />
+        {/* <Route path="/camera" element={<Camera />} /> */}
       </Route>
     </Routes>
   );

@@ -8,9 +8,9 @@ function Header() {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const url = ["/building/add-home", "/building/add-camera"];
+  const url = ["/building/add-home"];
   const shouldHidePage = url.includes(location.pathname);
-
+console.log(shouldHidePage)
   const buttonConfig = {
     "/building": {
       label: "+ Uy qo'shish",
@@ -23,7 +23,7 @@ function Header() {
       header: "Podyezdlar",
     },
     "/building/add-camera": {
-      label: "  ",
+      label: "+ Camera qo'shish",
       onClick: () => dispatch(openModal()),
       header: "Kamera qo'shish",
     },
@@ -42,7 +42,7 @@ function Header() {
             <button
               onClick={currentButton.onClick}
               className={`bg-primary-500 text-white px-4 py-2 rounded ml-2 ${
-                shouldHidePage && "opacity-0"
+                shouldHidePage && "hidden"
               }`}
             >
               {currentButton.label}

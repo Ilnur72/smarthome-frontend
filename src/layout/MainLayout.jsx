@@ -30,7 +30,7 @@ const MainLayout = () => {
         {/* </div> */}
 
         <div className="flex-1">
-          {shouldHidePage ? null : <Header />}
+          {/* {shouldHidePage ? null : <Header />} */}
           <Outlet />
         </div>
       </main>

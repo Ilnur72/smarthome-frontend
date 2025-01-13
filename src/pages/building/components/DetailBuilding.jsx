@@ -34,7 +34,7 @@ function BuildingDetail({ building }) {
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 1 }}>
         <strong>Uy manzili:</strong>
-        {`${address.region}, ${address.district}, ${address.street}`}
+        {`${address?.region}, ${address?.district}, ${address?.street}`}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 1 }}>
         <strong>Qavatlar soni:</strong> {data.data.floor}
@@ -75,7 +75,7 @@ function BuildingDetail({ building }) {
           variant="contained"
           color="secondary"
           onClick={() =>
-            navigate(`/building/add-camera?buildingId=${data.data.id}`)
+            navigate(`/building/camera?buildingId=${data.data.id}`)
           }
         >
           Camera

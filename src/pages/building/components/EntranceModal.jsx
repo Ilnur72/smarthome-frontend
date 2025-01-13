@@ -1,36 +1,34 @@
-import { Button,  Modal } from "@mui/material";
+import { Button, Modal } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../../store/slices/modalSlice";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
+import { useForm } from "react-hook-form";
 
-function EntranceModal({ register, handleSubmit, reset, refetch, buildingId }) {
-  const { isOpen, isClose } = useSelector((state) => state.modal);
-  const [loading, setLoading] = React.useState(false);
+function EntranceModal({ refetch, buildingId, setIsOpen, isOpen }) {
+  // const { isOpen, isClose } = useSelector((state) => state.modal);
+  const { register, handleSubmit, reset, formState } = useForm();
 
   const dispatch = useDispatch();
 
   const onSubmit = async (formData) => {
-    setLoading(true);
     formData.building_id = buildingId;
     const result = await axios.post("/entrance", {
       ...formData,
-      apartments_count: +formData.apartments_count,
       first_apartment_number: +formData.first_apartment_number,
       last_apartment_number: +formData.last_apartment_number,
     });
     refetch();
     reset();
-    dispatch(closeModal());
-    setLoading(false);
+    setIsOpen(false);
   };
 
   return (
     <Modal
       hideBackdrop={false}
       open={isOpen}
-      onClose={isClose}
+      onClose={() => setIsOpen(false)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -40,27 +38,17 @@ function EntranceModal({ register, handleSubmit, reset, refetch, buildingId }) {
         className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 w-96 p-10 rounded-xl "
         onSubmit={handleSubmit(onSubmit)}
       >
+        <div>
+          <label className="block mb-2">Podyezd nomi*</label>
+          <input
+            type="text"
+            placeholder="padyez nomi"
+            {...register("name")}
+            required={true}
+            className="border p-2 rounded w-full"
+          />
+        </div>
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-2">Podyezd nomi*</label>
-            <input
-              type="text"
-              placeholder="padyez nomi"
-              {...register("name")}
-              required={true}
-              className="border p-2 rounded w-full"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Kvartira soni*</label>
-            <input
-              type="number"
-              placeholder="raqam kiriting"
-              {...register("apartments_count")}
-              required={true}
-              className="border p-2 rounded w-full"
-            />
-          </div>
           <div>
             <label className="block mb-2">Kvartira raqami*</label>
             <input
@@ -121,7 +109,7 @@ function EntranceModal({ register, handleSubmit, reset, refetch, buildingId }) {
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"
-            onClick={() => dispatch(closeModal())}
+            onClick={() => setIsOpen(false)}
             type="button"
             // className="bg-slate-400 text-white px-4 py-2 rounded"
             sx={{
@@ -133,10 +121,10 @@ function EntranceModal({ register, handleSubmit, reset, refetch, buildingId }) {
           >
             Cancel
           </Button>
-          <LoadingButton
+          <Button
             type="submit"
-            loading={loading}
             variant="contained"
+            disabled={formState.isSubmitting}
             sx={{
               background: "#00BDD6FF",
               color: "#fff",
@@ -144,8 +132,8 @@ function EntranceModal({ register, handleSubmit, reset, refetch, buildingId }) {
               borderRadius: "4px",
             }}
           >
-            submit
-          </LoadingButton>
+            {formState.isSubmitting ? "Loading..." : "submit"}
+          </Button>
         </div>
       </form>
       {/* </div> */}
