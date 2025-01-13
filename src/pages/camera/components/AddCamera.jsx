@@ -103,7 +103,7 @@ function CameraModal({ refetch, buildingId, isOpen, setIsOpen }) {
             Podyezdlar
           </label>
           <div
-            className="grid grid-cols-3 gap-2 p-8"
+            className="grid grid-cols-3 gap-4 p-8"
             style={{
               gridTemplateColumns: `repeat(auto-fit, minmax(100px, 1fr))`,
             }}
