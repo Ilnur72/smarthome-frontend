@@ -38,15 +38,11 @@ function Entrance() {
 
   const { data, error, isLoading, refetch } = useQuery("entrance", () =>
     axios
-      .get(`/entrance?filters[building_id]=${buildingIdFromParams}`)
+      .get(
+        `/entrance?filters[building_id]=${buildingIdFromParams}&sort[by]=created_at&sort[order]=DESC`
+      )
       .then((res) => res.data)
   );
-
-  // useEffect(() => {
-  //   if (data) {
-  //     setEntrance(data.data); // Olingan ma'lumotlarni saqlash
-  //   }
-  // }, [data]);
 
   if (isLoading)
     return (
@@ -89,6 +85,7 @@ function Entrance() {
         buildingId={buildingIdFromParams}
         setIsOpen={setIsOpen}
         isOpen={isOpen}
+        lastApartmentNumber={data.data.entrance[0].last_apartment_number}
       />
       <EditEntrance
         showEntrance={showEntrance}

@@ -6,7 +6,15 @@ import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 
-function AddEntrance({ refetch, buildingId, setIsOpen, isOpen }) {
+function AddEntrance({
+  refetch,
+  buildingId,
+  setIsOpen,
+  isOpen,
+  lastApartmentNumber,
+}) {
+
+  
   // const { isOpen, isClose } = useSelector((state) => state.modal);
   const { register, handleSubmit, reset, formState } = useForm();
 
@@ -56,7 +64,7 @@ function AddEntrance({ refetch, buildingId, setIsOpen, isOpen }) {
               placeholder="dan"
               {...register("first_apartment_number")}
               required={true}
-              min={1}
+              min={lastApartmentNumber + 1}
               className="border p-2 rounded w-full"
             />
           </div>
@@ -67,7 +75,7 @@ function AddEntrance({ refetch, buildingId, setIsOpen, isOpen }) {
               placeholder="gacha"
               {...register("last_apartment_number")}
               required={true}
-              min={1}
+              min={lastApartmentNumber + 1}
               className="border p-2 rounded w-full"
             />
           </div>

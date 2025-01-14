@@ -41,7 +41,7 @@ function Building() {
 
     () =>
       axios
-        .get(`/building?page[offset]=${page}&page[limit]=${row}`)
+        .get(`/building?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC`)
         .then((res) => res.data)
         .catch((e) => console.log(e)),
     {
