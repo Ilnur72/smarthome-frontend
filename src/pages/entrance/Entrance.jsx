@@ -43,14 +43,14 @@ function Entrance() {
       )
       .then((res) => res.data)
   );
-
   if (isLoading)
     return (
-      <div className="flex items-center justify-center h-2/3">
+  <div className="flex items-center justify-center h-2/3">
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
-  return (
+
+    return (
     <div className="">
       <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
         <h2 className="text-xl font-bold">Podyezlar</h2>
@@ -85,7 +85,9 @@ function Entrance() {
         buildingId={buildingIdFromParams}
         setIsOpen={setIsOpen}
         isOpen={isOpen}
-        lastApartmentNumber={data.data.entrance[0].last_apartment_number}
+        lastApartmentNumber={
+          data.data?.entrance ? data.data.entrance[0]?.last_apartment_number : 1
+        }
       />
       <EditEntrance
         showEntrance={showEntrance}

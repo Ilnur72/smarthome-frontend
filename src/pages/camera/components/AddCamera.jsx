@@ -15,7 +15,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
 
   const { data, error, isLoading } = useQuery("entrance", () =>
     axios
-      .get(`/entrance?filters[building_id]=${buildingId}`)
+      .get(`/entrance?filters[building_id]=${buildingId}&sort[by]=name&sort[order]=ASC`)
       .then((res) => res.data)
   );
 
@@ -60,7 +60,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
           <ArrowBackIcon fontSize="medium" />
         </button> */}
       <form
-        className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 w-96 p-10 rounded-xl "
+        className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 p-10 rounded-xl "
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="grid grid-cols-2 gap-4">
@@ -103,7 +103,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
             Podyezdlar
           </label>
           <div
-            className="grid grid-cols-3 gap-4 p-8"
+            className="grid grid-cols-3 gap-7 px-8"
             style={{
               gridTemplateColumns: `repeat(auto-fit, minmax(100px, 1fr))`,
             }}
@@ -117,7 +117,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
                     checked={selectedEntrance.includes(entrance.id)}
                     onChange={() => handleEntranceToggle(entrance.id)}
                   />
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <div
                       className={`relative flex h-12 items-center rounded-lg border border-gray-300 bg-white px-4 shadow-sm transition-all hover:bg-gray-50`}
                     >
