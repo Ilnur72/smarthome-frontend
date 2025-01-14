@@ -8,10 +8,16 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Modal } from "@mui/material";
 
-function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
+function EditCamera({ refetch, buildingId, setShowCamera, showCamera }) {
   const { register, handleSubmit, reset, formState } = useForm();
   const navigate = useNavigate();
-  const [selectedEntrance, setSelectedEntrance] = React.useState([]);
+
+  let camera;
+  if (showCamera.data) camera = showCamera.data;
+
+  const [selectedEntrance, setSelectedEntrance] = React.useState(
+    camera.entrance_ids || []
+  );
 
   const { data, error, isLoading } = useQuery("entrance", () =>
     axios
@@ -28,37 +34,28 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
   };
 
   const onSubmit = async (data) => {
-    const result = await axios.post("/camera", {
+    const result = await axios.put(`/camera/${camera.id}`, {
       ...data,
       entrance_ids: selectedEntrance,
-      building_id: buildingId,
     });
     if (result.data.success) {
       setSelectedEntrance([]);
       reset();
-      setIsOpen(false);
+      setShowCamera({ isOpen: false });
       refetch();
     }
   };
+
   if (isLoading) return;
+
   return (
     <Modal
       hideBackdrop={false}
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
+      open={showCamera.isOpen}
+      onClose={() => setShowCamera({ isOpen: false })}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      {/* <div className="p-6 bg-white rounded-lg"> */}
-      {/* <button
-          type="button"
-          onClick={() =>
-            navigate(`/building/detail?buildingId=${buildingId}`)
-          }
-          className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
-        >
-          <ArrowBackIcon fontSize="medium" />
-        </button> */}
       <form
         className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 w-96 p-10 rounded-xl "
         onSubmit={handleSubmit(onSubmit)}
@@ -73,6 +70,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
               {...register("ip_address", { required: true })}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
               placeholder="IP"
+              defaultValue={camera.ip_address}
             />
           </div>
           <div className="mb-4">
@@ -84,6 +82,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
               {...register("login", { required: true })}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
               placeholder="Login"
+              defaultValue={camera.login}
             />
           </div>
         </div>
@@ -96,6 +95,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
             {...register("password", { required: true })}
             className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             placeholder="Password"
+            defaultValue={camera.password}
           />
         </div>
         <div className="mb-4">
@@ -149,7 +149,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"
-            onClick={() => setIsOpen(false)}
+            onClick={() => setShowCamera({ isOpen: false })}
             type="button"
             // className="bg-slate-400 text-white px-4 py-2 rounded"
             sx={{
@@ -181,4 +181,4 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
   );
 }
 
-export default AddCamera;
+export default EditCamera;

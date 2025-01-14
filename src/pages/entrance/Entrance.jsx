@@ -212,10 +212,12 @@ function Entrance() {
                   }}
                   align="center"
                 >
-                  {/* <IconButton
-                    // onClick={() => {
-                    //   navigate(`/users/${item.id}`);
-                    // }}
+                  <IconButton
+                    onClick={() => {
+                      navigate(
+                        `detail?entranceId=${item.id}&&buildingId=${buildingIdFromParams}`
+                      );
+                    }}
                     aria-label="view"
                     size="medium"
                     sx={{
@@ -231,7 +233,7 @@ function Entrance() {
                     }}
                   >
                     <img src={iconView} alt="" />
-                  </IconButton> */}
+                  </IconButton>
                   <IconButton
                     onClick={() => {
                       showData(item.id);
@@ -273,6 +275,15 @@ function Entrance() {
                     size="medium"
                   >
                     <img src={iconDelete} alt="" />
+                    {/* {loading ? (
+                      <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <img
+                        src="/path/to/delete-icon.svg"
+                        alt="Delete"
+                        className="w-5 h-5"
+                      />
+                    )} */}
                   </IconButton>
                 </TableCell>
               </TableRow>

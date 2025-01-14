@@ -21,14 +21,17 @@ import iconDelete from "../../assets/ActionIcon/delete.svg";
 import iconEdit from "../../assets/ActionIcon/edit.svg";
 import iconView from "../../assets/ActionIcon/view.svg";
 import React from "react";
-import CameraModal from "./components/AddCamera";
+import AddCamera from "./components/AddCamera";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import EditCamera from "./components/EditCamera";
 
 function Camera() {
   const [page, setPage] = React.useState(1);
   const [row, setRow] = React.useState(10);
+  const [showCamera, setShowCamera] = React.useState({ isOpen: false });
   const [isOpen, setIsOpen] = React.useState(false);
+
   const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
@@ -36,9 +39,18 @@ function Camera() {
 
   const { data, isLoading, refetch } = useQuery("camera", () =>
     axios
-      .get(`/camera?filters[building_id]=${buildingIdFromParams}&page[offset]=${page}&page[limit]=${row}`)
+      .get(
+        `/camera?filters[building_id]=${buildingIdFromParams}&page[offset]=${page}&page[limit]=${row}`
+      )
       .then((res) => res.data)
   );
+
+  async function showData(id) {
+    const { data } = await axios.get(`/camera/${id}`);
+
+    setShowCamera({ isOpen: true, data: data.data });
+  }
+
   React.useEffect(() => {
     refetch();
     if (data?.data?.data.length === 0 && page !== 1) setPage(page - 1);
@@ -76,7 +88,7 @@ function Camera() {
       </button>
       <div className="flex items-center justify-between pt-4 pl-4">
         <strong className="font-bold text-base text-primary">
-          Total: {data.data.total}
+          Total: {data?.data.total}
         </strong>
         <div className="flex items-center pb-2">
           {/* <Sort
@@ -85,12 +97,23 @@ function Camera() {
         /> */}
         </div>
       </div>
-      <CameraModal
-        refetch={refetch}
-        buildingId={buildingIdFromParams}
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-      />
+      {isOpen ? (
+        <AddCamera
+          refetch={refetch}
+          buildingId={buildingIdFromParams}
+          setIsOpen={setIsOpen}
+          isOpen={isOpen}
+          showCamera={showCamera}
+        />
+      ) : null}
+      {showCamera.isOpen ? (
+        <EditCamera
+          refetch={refetch}
+          buildingId={buildingIdFromParams}
+          setShowCamera={setShowCamera}
+          showCamera={showCamera}
+        />
+      ) : null}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
           <TableHead>
@@ -172,9 +195,9 @@ function Camera() {
                   align="center"
                 >
                   <IconButton
-                    // onClick={() => {
-                    //   navigate(`/users/${item.id}`);
-                    // }}
+                    onClick={() => {
+                      navigate(`/building/camera/detail?cameraId=${item.id}&&buildingId=${buildingIdFromParams}`);
+                    }}
                     aria-label="view"
                     size="medium"
                     sx={{
@@ -192,9 +215,9 @@ function Camera() {
                     <img src={iconView} alt="" />
                   </IconButton>
                   <IconButton
-                    // onClick={() => {
-                    //   showData(item.id);
-                    // }}
+                    onClick={() => {
+                      showData(item.id);
+                    }}
                     aria-label="edit"
                     size="medium"
                     sx={{
@@ -224,8 +247,8 @@ function Camera() {
                         },
                       },
                     }}
-                    onClick={() => {
-                      axios.delete(`/users/${item.id}`);
+                    onClick={async () => {
+                      await axios.delete(`/camera/${item.id}`);
                       refetch();
                     }}
                     aria-label="delete"

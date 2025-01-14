@@ -28,7 +28,7 @@ function Sidebar() {
   return (
     <div
       style={{ height: "100vh" }}
-      className="bg-white w-64 p-4 border-r-2 md:block"
+      className="bg-white w-64 p-4 border-r-2 md:block fixed"
     >
       <h1 className="text-lg font-bold text-blue-600">Project Name</h1>
       <p className="text-gray-500">Category</p>
