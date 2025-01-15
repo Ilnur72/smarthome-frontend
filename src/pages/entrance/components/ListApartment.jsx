@@ -19,13 +19,13 @@ function ListApartment({ data }) {
               sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
               align="center"
             >
-              Podyezd nomi
+              Uy raqami
             </TableCell>
             <TableCell
               sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
               align="center"
             >
-              Podyezd nomi
+              Status
             </TableCell>
           </TableRow>
         </TableHead>
