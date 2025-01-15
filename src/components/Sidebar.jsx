@@ -26,35 +26,38 @@ function Sidebar() {
     navigate("/login");
   };
   return (
-    <div
-      style={{ height: "100vh" }}
-      className="bg-white w-64 p-4 border-r-2 md:block fixed"
-    >
-      <h1 className="text-lg font-bold text-blue-600">Project Name</h1>
-      <p className="text-gray-500">Category</p>
-      <ul className="mt-4 flex flex-col gap-4">
-        {links.map((item, index) => (
-          <NavLink key={index} to={item.url}>
-            {({ isActive }) => (
-              <li
-                className={`flex items-center p-2 hover:bg-gray-100 rounded ${
-                  isActive && "bg-primary-150"
-                }`}
-              >
-                {<item.img className={`${isActive && "text-primary-500"}`} />}
-                <span className="ml-2 text-primary">{item.link}</span>
-              </li>
-            )}
-          </NavLink>
-        ))}
-        <li
-          className="flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer"
-          onClick={handleLogout}
-        >
-          <LogOutIcon className="text-gray-500" />
-          <span className="ml-2 text-primary">Logout</span>
-        </li>
-      </ul>
+    <div>
+      <div className="w-64"></div>
+      <div
+        style={{ height: "100vh" }}
+        className="bg-white w-64 p-4 border-r-2 md:block fixed"
+      >
+        <h1 className="text-lg font-bold text-blue-600">Project Name</h1>
+        <p className="text-gray-500">Category</p>
+        <ul className="mt-4 flex flex-col gap-4">
+          {links.map((item, index) => (
+            <NavLink key={index} to={item.url}>
+              {({ isActive }) => (
+                <li
+                  className={`flex items-center p-2 hover:bg-gray-100 rounded ${
+                    isActive && "bg-primary-150"
+                  }`}
+                >
+                  {<item.img className={`${isActive && "text-primary-500"}`} />}
+                  <span className="ml-2 text-primary">{item.link}</span>
+                </li>
+              )}
+            </NavLink>
+          ))}
+          <li
+            className="flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer"
+            onClick={handleLogout}
+          >
+            <LogOutIcon className="text-gray-500" />
+            <span className="ml-2 text-primary">Logout</span>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

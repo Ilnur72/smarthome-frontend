@@ -25,13 +25,9 @@ const MainLayout = () => {
   return (
     <div className="flex flex-col h-screen">
       <main className="flex flex-1 relative">
-        {/* <div className={`hidden md:block w-64`}> */}
         {location.pathname === "/login" ? null : <Sidebar />}
-        {/* </div> */}
-        <div className="w-64"></div>
 
         <div className="flex-1">
-          {/* {shouldHidePage ? null : <Header />} */}
           <Outlet />
         </div>
       </main>
