@@ -228,7 +228,7 @@ function Building() {
                   }}
                   align="center"
                 >
-                  {item.address.region}
+                  {item.address.street}
                 </TableCell>
                 <TableCell
                   sx={{
