@@ -161,6 +161,16 @@ function AddBuilding() {
               className="border p-2 rounded w-full"
             />
           </div>
+          <div>
+            <label className="block mb-2">Bino nomi*</label>
+            <input
+              type="text"
+              placeholder="14a"
+              {...register("name")}
+              required={true}
+              className="border p-2 rounded w-full"
+            />
+          </div>
 
           <div>
             <label className="block mb-2">Qavatlar soni*</label>

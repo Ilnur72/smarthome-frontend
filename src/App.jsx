@@ -15,6 +15,7 @@ import AddCamera from "./pages/camera/components/AddCamera";
 import Camera from "./pages/camera/Camera";
 import CameraDetail from "./pages/camera/components/DetailCamera";
 import EntranceDetail from "./pages/entrance/components/DetailEntrance";
+import User from "./pages/user/User";
 
 function App() {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/building/camera" element={<Camera />} />
         <Route path="/building/camera/detail" element={<CameraDetail />} />
         <Route path="/building/detail" element={<BuildingDetail />} />
+        <Route path="/user" element={<User />} />
         {/* <Route path="/camera" element={<Camera />} /> */}
       </Route>
     </Routes>

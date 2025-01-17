@@ -2,18 +2,14 @@
 
 import React from "react";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import FaxIcon from "@mui/icons-material/Fax";
-import CameraIcon from "@mui/icons-material/PhotoCameraFront";
-import MenuIcon from "@mui/icons-material/Menu";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Logout } from "@mui/icons-material";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, User } from "lucide-react";
 
 function Sidebar() {
   const navigate = useNavigate();
   let links = [
     { img: ApartmentIcon, link: "Building", url: `/building` },
-    // { img: FaxIcon, link: "Intercom", url: "/intercom" },
+    { img: User, link: "User", url: "/user" },
     // { img: CameraIcon, link: "Camera", url: `/camera` },
     // { img: Logout, l ink: "Logout", url: `/login` },
   ];
@@ -36,7 +32,7 @@ function Sidebar() {
           onClick={() => navigate("/building")}
           className="text-lg font-bold text-blue-600"
         >
-         <button> Project Name</button>
+          <button> Project Name</button>
         </h1>
         <p className="text-gray-500">Category</p>
         <ul className="mt-4 flex flex-col gap-4">
