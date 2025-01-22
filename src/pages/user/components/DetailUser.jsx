@@ -80,7 +80,7 @@ function UserDetail() {
           </Button>
         </Box>
       </Paper>
-      {/* <ListUserApartment data={userApartment.data} /> */}
+      <ListUserApartment data={userApartment.data} />
     </div>
   );
 }

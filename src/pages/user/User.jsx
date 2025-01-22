@@ -23,6 +23,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import AddUser from "./components/AddUser";
+import EditUser from "./components/EditUser";
 // import EditUser from "./components/EditUser";
 
 function User() {
@@ -89,11 +90,11 @@ function User() {
         <div className="flex items-center pb-2"></div>
       </div>
 
-      {/* <EditUser
+      <EditUser
         showUser={showUser}
         setShowUser={setShowUser}
         refetch={refetch}
-      /> */}
+      />
       <AddUser refetch={refetch} setIsOpen={setIsOpen} isOpen={isOpen} />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
@@ -116,12 +117,6 @@ function User() {
                 align="center"
               >
                 email
-              </TableCell>
-              <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-                align="center"
-              >
-                xonadon raqami
               </TableCell>
               <TableCell
                 sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
@@ -171,17 +166,6 @@ function User() {
                   align="center"
                 >
                   {item.email}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
-                >
-                  {item.apartment_id}
                 </TableCell>
                 <TableCell
                   sx={{

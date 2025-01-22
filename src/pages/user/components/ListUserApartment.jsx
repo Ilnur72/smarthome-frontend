@@ -23,16 +23,16 @@ function ListUserApartment({ data }) {
             >
               Uy raqami
             </TableCell>
-            <TableCell
+            {/* <TableCell
               sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
               align="center"
             >
               Status
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.apartments?.map((item, index) => (
+          {data.data?.map((item, index) => (
             <TableRow
               key={item.id}
               sx={{
@@ -48,9 +48,9 @@ function ListUserApartment({ data }) {
                 }}
                 align="center"
               >
-                {item.number}
+                {item.apartment.number}
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 sx={{
                   fontSize: 16,
                   fontWeight: 600,
@@ -60,7 +60,7 @@ function ListUserApartment({ data }) {
           xs      align="center"
               >
                 {item.status === "SOLD_OUT" ? "Sotuvda" : "Sotildi"}
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
