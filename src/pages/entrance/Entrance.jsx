@@ -51,7 +51,7 @@ function Entrance() {
     );
 
     return (
-    <div className="">
+    <div>
       <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
         <h2 className="text-xl font-bold">Podyezlar</h2>
         <div className="flex items-center">
@@ -76,7 +76,7 @@ function Entrance() {
       </button>
       <div className="flex items-center justify-between pt-4 pl-4">
         <strong className="font-bold text-base text-primary">
-          Total: {data.data.total}
+          Total: {data?.data.total}
         </strong>
         <div className="flex items-center pb-2"></div>
       </div>

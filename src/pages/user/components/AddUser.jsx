@@ -1,21 +1,12 @@
 import { Button, Modal } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
-import { useForm, Controller } from "react-hook-form";
-import { loadState } from "../../../Utils/storage";
-import { jwtDecode } from "jwt-decode";
-import { useQuery } from "react-query";
-import Select from "react-select";
+import { useForm } from "react-hook-form";
+
 import { toast } from "react-toastify";
 
 function AddUser({ refetch, setIsOpen, isOpen }) {
-  const { register, handleSubmit, reset, control, setValue, formState } =
-    useForm();
-  const [entrance, setEntrance] = useState([]);
-  const [apartments, setApartment] = useState([]);
-
-  const token = loadState("token");
-  const { user } = jwtDecode(token);
+  const { register, handleSubmit, reset, formState } = useForm();
 
   const onSubmit = async (formData) => {
     try {
@@ -24,49 +15,20 @@ function AddUser({ refetch, setIsOpen, isOpen }) {
         email: formData.email,
         fullname: formData.fullname,
       });
-      if (result.data.success) {
-        const resultUserApartment = await axios.post("/user-apartment", {
-          user_id: result.data.data.id,
-          apartment_id: formData.apartment_id.value,
-        });
 
+      if (result.data.success) {
         refetch();
         reset();
         setIsOpen(false);
       }
     } catch (error) {
-      if (error.response.data?.statusCode === 400) {
-        toast.error(error.response.data.message);
+      if (error.response?.data.statusCode === 400) {
+        toast.error(
+          typeof error.response.data.message == "object"
+            ? error.response.data.message[0]
+            : error.response.data.message
+        );
       }
-    }
-  };
-
-  const { data: buildingData, isLoading } = useQuery("building", () =>
-    axios
-      .get(`/building`)
-      .then((res) => res.data)
-      .catch((e) => console.log(e))
-  );
-
-  const fetchEntrance = async (id) => {
-    try {
-      const { data: findEntrance } = await axios.get(`/building/${id}`);
-      setEntrance(findEntrance.data.entrances || []);
-      setApartment([]); // Entrance o'zgarganida apartmentsni tozalash
-      setValue("entrance_id", ""); // Entrance ni reset qilish
-      setValue("apartment_id", ""); // Apartment ni reset qilish
-    } catch (error) {
-      console.error("Error fetching Building:", error);
-    }
-  };
-
-  const fetchApartment = async (id) => {
-    try {
-      const { data: findEntrance } = await axios.get(`/entrance/${id}`);
-      setApartment(findEntrance.data.apartments || []);
-      setValue("apartment_id", ""); // Apartmentni reset qilish
-    } catch (error) {
-      console.error("Error fetching entrance:", error);
     }
   };
 
@@ -115,72 +77,6 @@ function AddUser({ refetch, setIsOpen, isOpen }) {
             className="border p-2 rounded w-full"
           />
         </div>
-        <div>
-          <label className="block mb-2">Binoni tanlang*</label>
-          <Controller
-            name="building_id"
-            control={control} // control props
-            render={({ field }) => (
-              <Select
-                {...field} // controller field
-                options={
-                  isLoading ||
-                  buildingData.data?.buildings?.map((item) => {
-                    return { value: item.id, label: item.name };
-                  })
-                } // building options
-                onChange={(e) => {
-                  field.onChange(e); // onChange uchun field ni ishlatish
-                  fetchEntrance(e.value); // Building tanlanganda Entrance ma'lumotlarini olib kelish
-                }}
-                placeholder="Building tanlang"
-                isSearchable // Qidiruv imkoniyati
-              />
-            )}
-          />
-        </div>
-        <div>
-          <label className="block mb-2">Podyezni tanlang*</label>
-          <Controller
-            name="entrance_id"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={entrance?.map((item) => ({
-                  value: item.id,
-                  label: item.name,
-                }))}
-                onChange={(e) => {
-                  field.onChange(e);
-                  fetchApartment(e.value); // Entrance tanlanganda Apartmentsni olib kelish
-                }}
-                placeholder="Podyezni tanlang"
-                isSearchable
-              />
-            )}
-          />
-        </div>
-        <div>
-          <label className="block mb-2">Xonadonni tanlang*</label>
-          <Controller
-            name="apartment_id"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={apartments?.map((item) => ({
-                  value: item.id,
-                  label: item.number,
-                }))}
-                onChange={field.onChange}
-                placeholder="Xonadonni tanlang"
-                isSearchable
-              />
-            )}
-          />
-        </div>
-
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"

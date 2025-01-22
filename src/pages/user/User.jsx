@@ -32,14 +32,13 @@ function User() {
   const [showUser, setShowUser] = React.useState({ isOpen: false });
   const [isOpen, setIsOpen] = React.useState(false);
 
-
   async function showData(id) {
     const { data } = await axios.get(`/user/${id}`);
 
     setShowUser({ isOpen: true, data: data.data });
   }
 
-  const { data, error, isLoading, refetch } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     "user",
 
     () =>
@@ -56,7 +55,6 @@ function User() {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(data);
 
   React.useEffect(() => {
     refetch();
@@ -196,7 +194,7 @@ function User() {
                 >
                   <IconButton
                     onClick={() => {
-                      navigate(`/building/detail?buildingId=${item.id}`);
+                      navigate(`/user/detail?userId=${item.id}`);
                     }}
                     aria-label="view"
                     size="medium"
@@ -248,22 +246,13 @@ function User() {
                       },
                     }}
                     onClick={async () => {
-                      await axios.delete(`/building/${item.id}`);
+                      await axios.delete(`/user/${item.id}`);
                       refetch();
                     }}
                     aria-label="delete"
                     size="medium"
                   >
-                    {/* {loadingDelete ? (
-                    //   <OrbitProgress
-                    //     color="#32cd32"
-                    //     size="medium"
-                    //     text=""
-                    //     textColor=""
-                    //   />
-                    // ) : ( */}
                     <img src={iconDelete} alt="" />
-                    {/* )} */}
                   </IconButton>
                 </TableCell>
               </TableRow>

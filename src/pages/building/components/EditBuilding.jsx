@@ -27,7 +27,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
   const [districts, setDistricts] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [position, setPosition] = React.useState([
-    showBuilding.data?.location?.lat || 41.2995, // Default to Tashkent if no location
+    showBuilding.data?.location?.lat || 41.2995,
     showBuilding.data?.location?.lng || 69.2401,
   ]);
   const { register, handleSubmit, reset } = useForm();
@@ -45,7 +45,12 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
   const fetchDistricts = async (id) => {
     try {
       const { data: findRegion } = await axios.get(`/region/${id}`);
-      setDistricts(findRegion.data.district || []);
+      const sortedDistricts = findRegion.data.district.sort((a, b) => {
+        if (a.id === showBuilding.data.address.districtId) return -1;
+        if (b.id === showBuilding.data.address.districtId) return 1;
+        return 0;
+      });
+      setDistricts(sortedDistricts || []);
     } catch (error) {
       console.error("Error fetching districts:", error);
     }
@@ -56,7 +61,6 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
       click(e) {
         const { lat, lng } = e.latlng;
         setPosition([lat, lng]);
-        // Update the location in the form
         reset({ ...reset(), location: `${lat}, ${lng}` });
       },
     });
@@ -71,13 +75,15 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
       floor: +formData.floor,
       entrance_count: +formData.entrance_count,
       district_id: formData.district_id || showBuilding.data.address.districtId,
-      location: { lat: position[0], lng: position[1] }, // Update location
+      location: { lat: position[0], lng: position[1] },
     });
     refetch();
     reset();
     setShowBuilding({ isOpen: false });
     setLoading(false);
   };
+
+  if (!showBuilding.data) return null;
 
   return (
     <Modal
@@ -100,10 +106,9 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               onChange={(e) => fetchDistricts(e.target.value)}
               className="border p-2 rounded w-full"
               defaultValue={showBuilding.data.address.regionId || ""}
-              defaultChecked={showBuilding.data.address.regionId}
             >
               <option value="" disabled>
-                {showBuilding.data.address.region || "Viloyatni tanlang"}
+                "Viloyatni tanlang"
               </option>
               {data?.data?.region.map((region) => (
                 <option key={region.id} value={region.id}>
@@ -119,11 +124,10 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               {...register("district_id")}
               required
               className="border p-2 rounded w-full"
-              defaultValue={showBuilding.data.address.districtId || ""}
-              defaultChecked={showBuilding.data.address.districtId}
+              defaultValue={showBuilding.data?.address?.districtId || ""}
             >
               <option value="" disabled>
-                Tumanni tanlang
+                "Tumanni tanlang"
               </option>
               {districts.map((district) => (
                 <option key={district.id} value={district.id}>
@@ -184,29 +188,28 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               className="border p-2 rounded w-full"
             />
           </div>
-
         </div>
-          <div>
-            <label className="block mb-2">Location</label>
-            <div style={{ height: "200px", width: "100%" }}>
-              <MapContainer
-                center={position}
-                zoom={13}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <MapClick />
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={position}>
-                  <Popup>
-                    Tanlangan joy: {position[0]}, {position[1]}
-                  </Popup>
-                </Marker>
-              </MapContainer>
-            </div>
+        <div>
+          <label className="block mb-2">Location</label>
+          <div style={{ height: "200px", width: "100%" }}>
+            <MapContainer
+              center={position}
+              zoom={13}
+              style={{ height: "100%", width: "100%" }}
+            >
+              <MapClick />
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <Marker position={position}>
+                <Popup>
+                  Tanlangan joy: {position[0]}, {position[1]}
+                </Popup>
+              </Marker>
+            </MapContainer>
           </div>
+        </div>
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"
