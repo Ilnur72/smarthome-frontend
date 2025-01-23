@@ -17,9 +17,16 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
   const [entrance, setEntrance] = React.useState([]);
   const [apartments, setApartment] = React.useState([]);
 
+  const { data: buildingData, isLoading } = useQuery("building", () =>
+    axios
+      .get(`/building?sort[by]=name&sort[order]=ASC`)
+      .then((res) => res.data)
+      .catch((e) => console.log(e))
+  );
+
   const onSubmit = async (formData) => {
     try {
-      const resultUserApartment = await axios.post("/user-apartment", {
+      await axios.post("/user-apartment", {
         user_id: userIdFromParams,
         apartment_id: formData.apartment_id.value,
       });
@@ -27,9 +34,6 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
       reset();
       setIsOpen(false);
     } catch (error) {
-      console.log("sdasd");
-      console.log(error);
-
       if (error.response?.data.statusCode === 400) {
         toast.error(
           typeof error.response.data.message == "object"
@@ -40,20 +44,13 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
     }
   };
 
-  const { data: buildingData, isLoading } = useQuery("building", () =>
-    axios
-      .get(`/building`)
-      .then((res) => res.data)
-      .catch((e) => console.log(e))
-  );
-
   const fetchEntrance = async (id) => {
     try {
       const { data: findEntrance } = await axios.get(`/building/${id}`);
       setEntrance(findEntrance.data.entrances || []);
-      setApartment([]); // Entrance o'zgarganida apartmentsni tozalash
-      setValue("entrance_id", ""); // Entrance ni reset qilish
-      setValue("apartment_id", ""); // Apartment ni reset qilish
+      setApartment([]);
+      setValue("entrance_id", "");
+      setValue("apartment_id", "");
     } catch (error) {
       console.error("Error fetching Building:", error);
     }
@@ -63,7 +60,7 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
     try {
       const { data: findEntrance } = await axios.get(`/entrance/${id}`);
       setApartment(findEntrance.data.apartments || []);
-      setValue("apartment_id", ""); // Apartmentni reset qilish
+      setValue("apartment_id", "");
     } catch (error) {
       console.error("Error fetching entrance:", error);
     }

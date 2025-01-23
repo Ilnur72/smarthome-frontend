@@ -15,17 +15,18 @@ function UserDetail() {
 
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const { data, error, isLoading, refetch } = useQuery("user-detail", () =>
+  const { data, isLoading } = useQuery("user-detail", () =>
     axios.get(`/user/${userIdFromParams}`).then((res) => res.data)
   );
-  const { data: userApartment, isLoading: isLoadingUser } = useQuery(
-    "user-apartments",
-    () =>
-      axios
-        .get(`/user-apartment?filters[user_id]=${userIdFromParams}`)
-        .then((res) => res.data)
+  const {
+    data: userApartment,
+    isLoading: isLoadingUser,
+    refetch,
+  } = useQuery("user-apartments", () =>
+    axios
+      .get(`/user-apartment?filters[user_id]=${userIdFromParams}`)
+      .then((res) => res.data)
   );
-  console.log(userApartment);
 
   if (isLoading || isLoadingUser)
     return (
@@ -56,7 +57,7 @@ function UserDetail() {
         <Typography variant="body1" sx={{ marginBottom: 1 }}>
           <strong>Phone:</strong> {data.data.phone}
         </Typography>
-        {userApartment.data.total ? (
+        {userApartment?.data?.total ? (
           <Typography variant="body1" sx={{ marginBottom: 1 }}>
             <strong>Uy raqami:</strong>{" "}
             {userApartment.data.data[0]?.apartment.number}

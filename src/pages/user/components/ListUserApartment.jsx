@@ -10,8 +10,6 @@ import {
 import React from "react";
 
 function ListUserApartment({ data }) {
-  console.log(data);
-  
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
@@ -21,14 +19,20 @@ function ListUserApartment({ data }) {
               sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
               align="center"
             >
-              Uy raqami
+              Bino raqami
             </TableCell>
-            {/* <TableCell
+            <TableCell
               sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
               align="center"
             >
-              Status
-            </TableCell> */}
+              Podyezd raqami
+            </TableCell>
+            <TableCell
+              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+              align="center"
+            >
+              Uy raqami raqami
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -48,19 +52,32 @@ function ListUserApartment({ data }) {
                 }}
                 align="center"
               >
-                {item.apartment.number}
+                {item.apartment?.entrance?.buildings?.name}
               </TableCell>
-              {/* <TableCell
+              <TableCell
                 sx={{
                   fontSize: 16,
                   fontWeight: 600,
                   color: "#092C4C",
                   paddingY: 0.8,
                 }}
-          xs      align="center"
+                xs
+                align="center"
               >
-                {item.status === "SOLD_OUT" ? "Sotuvda" : "Sotildi"}
-              </TableCell> */}
+                {item.apartment.entrance.name}
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#092C4C",
+                  paddingY: 0.8,
+                }}
+                xs
+                align="center"
+              >
+                {item.apartment.number}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
