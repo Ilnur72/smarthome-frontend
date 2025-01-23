@@ -15,17 +15,26 @@ function UserDetail() {
 
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const { data, isLoading } = useQuery("user-detail", () =>
-    axios.get(`/user/${userIdFromParams}`).then((res) => res.data)
+  const { data, isLoading } = useQuery(
+    "user-detail",
+    () => axios.get(`/user/${userIdFromParams}`).then((res) => res.data),
+    {
+      staleTime: 0,
+    }
   );
   const {
     data: userApartment,
     isLoading: isLoadingUser,
     refetch,
-  } = useQuery("user-apartments", () =>
-    axios
-      .get(`/user-apartment?filters[user_id]=${userIdFromParams}`)
-      .then((res) => res.data)
+  } = useQuery(
+    ["user-apartments", userIdFromParams],
+    () =>
+      axios
+        .get(`/user-apartment?filters[user_id]=${userIdFromParams}`)
+        .then((res) => res.data),
+    {
+      enabled: !!userIdFromParams,
+    }
   );
 
   if (isLoading || isLoadingUser)
@@ -57,17 +66,13 @@ function UserDetail() {
         <Typography variant="body1" sx={{ marginBottom: 1 }}>
           <strong>Phone:</strong> {data.data.phone}
         </Typography>
-        {userApartment?.data?.total ? (
-          <Typography variant="body1" sx={{ marginBottom: 1 }}>
-            <strong>Uy raqami:</strong>{" "}
-            {userApartment.data.data[0]?.apartment.number}
-          </Typography>
-        ) : null}
         <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
           <Button
             variant="contained"
             color="inherit"
-            onClick={() => navigate(`/user`)}
+            onClick={() => {
+              navigate(`/user`);
+            }}
           >
             <ArrowBackIcon fontSize="medium" />
             Back
@@ -81,7 +86,7 @@ function UserDetail() {
           </Button>
         </Box>
       </Paper>
-      <ListUserApartment data={userApartment.data} />
+      <ListUserApartment data={userApartment.data} refetch={refetch} />
     </div>
   );
 }

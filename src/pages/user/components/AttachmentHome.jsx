@@ -8,8 +8,7 @@ import { loadState } from "../../../Utils/storage";
 import { jwtDecode } from "jwt-decode";
 
 function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
-  const { register, handleSubmit, reset, control, setValue, formState } =
-    useForm();
+  const { handleSubmit, reset, control, setValue, formState } = useForm();
 
   const token = loadState("token");
   const { user } = jwtDecode(token);
@@ -32,6 +31,8 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
       });
       refetch();
       reset();
+      setEntrance([]);
+      setApartment([]);
       setIsOpen(false);
     } catch (error) {
       if (error.response?.data.statusCode === 400) {
@@ -149,6 +150,8 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
             onClick={() => {
               setIsOpen(false);
               reset();
+              setApartment([]);
+              setEntrance([]);
             }}
             type="button"
             sx={{
