@@ -23,12 +23,18 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import EditBuilding from "./components/EditBuilding";
+import { loadState } from "../../Utils/storage";
+import { jwtDecode } from "jwt-decode";
 
 function Building() {
   const [page, setPage] = React.useState(1);
   const [row, setRow] = React.useState(10);
   const navigate = useNavigate();
   const [showBuilding, setShowBuilding] = React.useState({ isOpen: false });
+
+  const token = loadState("token");
+  const { user } = jwtDecode(token);
+  console.log(user);
 
   async function showData(id) {
     const { data } = await axios.get(`/building/${id}`);
@@ -41,7 +47,11 @@ function Building() {
 
     () =>
       axios
-        .get(`/building?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC`)
+        .get(
+          `/building?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC${
+            user.role === "OPERATOR" ? "&filters[operator_id]=" + user.id : ""
+          }`
+        )
         .then((res) => res.data)
         .catch((e) => console.log(e)),
     {
@@ -68,15 +78,17 @@ function Building() {
       <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
         <h2 className="text-xl font-bold">Uylar</h2>
         <div className="flex items-center">
-          <button
-            onClick={() => {
-              setShowBuilding({ isOpen: true });
-              navigate("add-home");
-            }}
-            className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
-          >
-            Uy qo'shish
-          </button>
+          {user.role === "SYSTEM_ADMIN" ? (
+            <button
+              onClick={() => {
+                setShowBuilding({ isOpen: true });
+                navigate("add-home");
+              }}
+              className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
+            >
+              Uy qo'shish
+            </button>
+          ) : null}
         </div>
       </div>
       <div className="flex items-center justify-between pt-4 pl-4">
@@ -96,49 +108,105 @@ function Building() {
           <TableHead>
             <TableRow>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="left"
               >
                 Bino raqami
               </TableCell>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="center"
               >
                 Viloyat
               </TableCell>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="center"
               >
                 Tuman
               </TableCell>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="center"
               >
                 Qavatlar soni
               </TableCell>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="center"
               >
                 Padezlar soni
               </TableCell>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="center"
               >
                 Xonadonlar soni
               </TableCell>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="center"
               >
                 Uy manzili
               </TableCell>
               <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "#092C4C",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
                 align="center"
               >
                 action
@@ -159,6 +227,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 150,
                   }}
                   align="center"
                 >
@@ -170,6 +242,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 170,
                   }}
                   align="center"
                 >
@@ -181,6 +257,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 170,
                   }}
                   align="center"
                 >
@@ -192,6 +272,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 170,
                   }}
                   align="center"
                 >
@@ -203,6 +287,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 170,
                   }}
                   align="center"
                 >
@@ -214,6 +302,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 170,
                   }}
                   align="center"
                 >
@@ -225,6 +317,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 170,
                   }}
                   align="center"
                 >
@@ -236,6 +332,10 @@ function Building() {
                     fontWeight: 600,
                     color: "#092C4C",
                     paddingY: 0.8,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 170,
                   }}
                   align="center"
                 >
@@ -259,57 +359,52 @@ function Building() {
                   >
                     <img src={iconView} alt="" />
                   </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      showData(item.id);
-                    }}
-                    aria-label="edit"
-                    size="medium"
-                    sx={{
-                      mx: 1,
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
+                  {user.role === "SYSTEM_ADMIN" ? (
+                    <IconButton
+                      onClick={() => {
+                        showData(item.id);
+                      }}
+                      aria-label="edit"
+                      size="medium"
+                      sx={{
+                        mx: 1,
+                        width: "35px",
+                        height: "35px",
+                        border: "1px solid #EAEEF4",
+                        "&:hover": {
+                          backgroundColor: "#00BDD6FF",
+                          "& > img": {
+                            filter: "brightness(2000%)",
+                          },
                         },
-                      },
-                    }}
-                  >
-                    <img src={iconEdit} alt="" />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
+                      }}
+                    >
+                      <img src={iconEdit} alt="" />
+                    </IconButton>
+                  ) : null}
+                  {user.role === "SYSTEM_ADMIN" ? (
+                    <IconButton
+                      sx={{
+                        width: "35px",
+                        height: "35px",
+                        border: "1px solid #EAEEF4",
+                        "&:hover": {
+                          backgroundColor: "#00BDD6FF",
+                          "& > img": {
+                            filter: "brightness(2000%)",
+                          },
                         },
-                      },
-                    }}
-                    onClick={async () => {
-                      await axios.delete(`/building/${item.id}`);
-                      refetch();
-                    }}
-                    aria-label="delete"
-                    size="medium"
-                  >
-                    {/* {loadingDelete ? (
-                    //   <OrbitProgress
-                    //     color="#32cd32"
-                    //     size="medium"
-                    //     text=""
-                    //     textColor=""
-                    //   />
-                    // ) : ( */}
-                    <img src={iconDelete} alt="" />
-                    {/* )} */}
-                  </IconButton>
+                      }}
+                      onClick={async () => {
+                        await axios.delete(`/building/${item.id}`);
+                        refetch();
+                      }}
+                      aria-label="delete"
+                      size="medium"
+                    >
+                      <img src={iconDelete} alt="" />
+                    </IconButton>
+                  ) : null}
                 </TableCell>
               </TableRow>
             ))}

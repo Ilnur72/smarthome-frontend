@@ -25,6 +25,8 @@ import AddCamera from "./components/AddCamera";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import EditCamera from "./components/EditCamera";
+import { loadState } from "../../Utils/storage";
+import { jwtDecode } from "jwt-decode";
 
 function Camera() {
   const [page, setPage] = React.useState(1);
@@ -33,6 +35,9 @@ function Camera() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const navigate = useNavigate();
+
+  const token = loadState("token");
+  const { user } = jwtDecode(token);
 
   const queryParams = new URLSearchParams(location.search);
   const buildingIdFromParams = queryParams.get("buildingId");
@@ -67,14 +72,16 @@ function Camera() {
       <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
         <h2 className="text-xl font-bold">Kameralar</h2>
         <div className="flex items-center">
-          <button
-            onClick={() => {
-              setIsOpen(true);
-            }}
-            className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
-          >
-            Kamera qo'shish
-          </button>
+          {user.role === "SYSTEM_ADMIN" ? (
+            <button
+              onClick={() => {
+                setIsOpen(true);
+              }}
+              className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
+            >
+              Kamera qo'shish
+            </button>
+          ) : null}
         </div>
       </div>
       <button
@@ -196,7 +203,9 @@ function Camera() {
                 >
                   <IconButton
                     onClick={() => {
-                      navigate(`/building/camera/detail?cameraId=${item.id}&&buildingId=${buildingIdFromParams}`);
+                      navigate(
+                        `/building/camera/detail?cameraId=${item.id}&&buildingId=${buildingIdFromParams}`
+                      );
                     }}
                     aria-label="view"
                     size="medium"
@@ -214,48 +223,52 @@ function Camera() {
                   >
                     <img src={iconView} alt="" />
                   </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      showData(item.id);
-                    }}
-                    aria-label="edit"
-                    size="medium"
-                    sx={{
-                      mx: 1,
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
+                  {user.role === "SYSTEM_ADMIN" ? (
+                    <IconButton
+                      onClick={() => {
+                        showData(item.id);
+                      }}
+                      aria-label="edit"
+                      size="medium"
+                      sx={{
+                        mx: 1,
+                        width: "35px",
+                        height: "35px",
+                        border: "1px solid #EAEEF4",
+                        "&:hover": {
+                          backgroundColor: "#00BDD6FF",
+                          "& > img": {
+                            filter: "brightness(2000%)",
+                          },
                         },
-                      },
-                    }}
-                  >
-                    <img src={iconEdit} alt="" />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
+                      }}
+                    >
+                      <img src={iconEdit} alt="" />
+                    </IconButton>
+                  ) : null}
+                  {user.role === "SYSTEM_ADMIN" ? (
+                    <IconButton
+                      sx={{
+                        width: "35px",
+                        height: "35px",
+                        border: "1px solid #EAEEF4",
+                        "&:hover": {
+                          backgroundColor: "#00BDD6FF",
+                          "& > img": {
+                            filter: "brightness(2000%)",
+                          },
                         },
-                      },
-                    }}
-                    onClick={async () => {
-                      await axios.delete(`/camera/${item.id}`);
-                      refetch();
-                    }}
-                    aria-label="delete"
-                    size="medium"
-                  >
-                    <img src={iconDelete} alt="" />
-                  </IconButton>
+                      }}
+                      onClick={async () => {
+                        await axios.delete(`/camera/${item.id}`);
+                        refetch();
+                      }}
+                      aria-label="delete"
+                      size="medium"
+                    >
+                      <img src={iconDelete} alt="" />
+                    </IconButton>
+                  ) : null}
                 </TableCell>
               </TableRow>
             ))}

@@ -21,12 +21,17 @@ import iconView from "../../assets/ActionIcon/view.svg";
 import AddEntrance from "./components/AddEntrance";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditEntrance from "./components/EditEntrance";
+import { loadState } from "../../Utils/storage";
+import { jwtDecode } from "jwt-decode";
 
 function Entrance() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
   const queryParams = new URLSearchParams(location.search);
   const buildingIdFromParams = queryParams.get("buildingId");
+
+  const token = loadState("token");
+  const { user } = jwtDecode(token);
 
   const [showEntrance, setShowEntrance] = React.useState({ isOpen: false });
 
@@ -45,24 +50,26 @@ function Entrance() {
   );
   if (isLoading)
     return (
-  <div className="flex items-center justify-center h-2/3">
+      <div className="flex items-center justify-center h-2/3">
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
 
-    return (
+  return (
     <div>
       <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
         <h2 className="text-xl font-bold">Podyezlar</h2>
         <div className="flex items-center">
-          <button
-            onClick={() => {
-              setIsOpen(true);
-            }}
-            className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
-          >
-            Podyez qo'shish
-          </button>
+          {user.role === "SYSTEM_ADMIN" ? (
+            <button
+              onClick={() => {
+                setIsOpen(true);
+              }}
+              className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
+            >
+              Podyez qo'shish
+            </button>
+          ) : null}
         </div>
       </div>
       <button
@@ -233,57 +240,52 @@ function Entrance() {
                   >
                     <img src={iconView} alt="" />
                   </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      showData(item.id);
-                    }}
-                    aria-label="edit"
-                    size="medium"
-                    sx={{
-                      mx: 1,
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
+                  {user.role === "SYSTEM_ADMIN" ? (
+                    <IconButton
+                      onClick={() => {
+                        showData(item.id);
+                      }}
+                      aria-label="edit"
+                      size="medium"
+                      sx={{
+                        mx: 1,
+                        width: "35px",
+                        height: "35px",
+                        border: "1px solid #EAEEF4",
+                        "&:hover": {
+                          backgroundColor: "#00BDD6FF",
+                          "& > img": {
+                            filter: "brightness(2000%)",
+                          },
                         },
-                      },
-                    }}
-                  >
-                    <img src={iconEdit} alt="" />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
+                      }}
+                    >
+                      <img src={iconEdit} alt="" />
+                    </IconButton>
+                  ) : null}
+                  {user.role === "SYSTEM_ADMIN" ? (
+                    <IconButton
+                      sx={{
+                        width: "35px",
+                        height: "35px",
+                        border: "1px solid #EAEEF4",
+                        "&:hover": {
+                          backgroundColor: "#00BDD6FF",
+                          "& > img": {
+                            filter: "brightness(2000%)",
+                          },
                         },
-                      },
-                    }}
-                    onClick={async () => {
-                      await axios.delete(`/entrance/${item.id}`);
-                      refetch();
-                    }}
-                    aria-label="delete"
-                    size="medium"
-                  >
-                    <img src={iconDelete} alt="" />
-                    {/* {loading ? (
-                      <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    ) : (
-                      <img
-                        src="/path/to/delete-icon.svg"
-                        alt="Delete"
-                        className="w-5 h-5"
-                      />
-                    )} */}
-                  </IconButton>
+                      }}
+                      onClick={async () => {
+                        await axios.delete(`/entrance/${item.id}`);
+                        refetch();
+                      }}
+                      aria-label="delete"
+                      size="medium"
+                    >
+                      <img src={iconDelete} alt="" />
+                    </IconButton>
+                  ) : null}
                 </TableCell>
               </TableRow>
             ))}

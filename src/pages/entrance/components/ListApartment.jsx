@@ -1,4 +1,6 @@
 import {
+  Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -8,8 +10,14 @@ import {
   TableRow,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import iconDelete from "../../../assets/ActionIcon/delete.svg";
+import axios from "axios";
 
-function ListApartment({ data }) {
+function ListApartment({ data, refetch }) {
+  console.log(data);
+  const navigate = useNavigate();
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
@@ -25,8 +33,24 @@ function ListApartment({ data }) {
               sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
               align="center"
             >
-              Status
+              Foydalanuvchi
             </TableCell>
+            <TableCell
+              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+              align="center"
+            >
+              Telefon raqami
+            </TableCell>
+            <TableCell
+              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+              align="center"
+            >
+              ACTION
+            </TableCell>
+            <TableCell
+              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+              align="center"
+            ></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,9 +79,73 @@ function ListApartment({ data }) {
                   color: "#092C4C",
                   paddingY: 0.8,
                 }}
-          xs      align="center"
+                align="center"
               >
-                {item.status === "SOLD_OUT" ? "Sotuvda" : "Sotildi"}
+                {item.userApartments.length
+                  ? item.userApartments[0].user.fullname
+                  : ""}
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#092C4C",
+                  paddingY: 0.8,
+                }}
+                align="center"
+              >
+                {item.userApartments.length
+                  ? item.userApartments[0].user.phone
+                  : ""}
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#092C4C",
+                  paddingY: 0.8,
+                }}
+                align="center"
+              >
+                {item.userApartments.length ? (
+                  <IconButton
+                    sx={{
+                      width: "35px",
+                      height: "35px",
+                      border: "1px solid #EAEEF4",
+                      "&:hover": {
+                        backgroundColor: "#00BDD6FF",
+                        "& > img": {
+                          filter: "brightness(2000%)",
+                        },
+                      },
+                    }}
+                    onClick={async () => {
+                      await axios.delete(
+                        `/user-apartment/${
+                          item.userApartments.length
+                            ? item.userApartments[0].id
+                            : ""
+                        }`
+                      );
+                      refetch();
+                    }}
+                    aria-label="delete"
+                    size="medium"
+                  >
+                    <img src={iconDelete} alt="" />
+                  </IconButton>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() =>
+                      navigate(`attachment-user?apartmentId=${item.id}`)
+                    }
+                  >
+                    Userni uyga biriktirish
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}

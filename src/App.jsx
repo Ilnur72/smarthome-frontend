@@ -17,6 +17,9 @@ import CameraDetail from "./pages/camera/components/DetailCamera";
 import EntranceDetail from "./pages/entrance/components/DetailEntrance";
 import User from "./pages/user/User";
 import UserDetail from "./pages/user/components/DetailUser";
+import Operator from "./pages/operator/Operator";
+import OperatorDetail from "./pages/operator/components/DetailOperator";
+import AttachmentUser from "./pages/entrance/components/AttachmentUser";
 
 function App() {
   const navigate = useNavigate();
@@ -37,12 +40,21 @@ function App() {
         <Route path="/building/add-home" element={<AddBuilding />} />
         <Route path="/building/entrance" element={<Entrance />} />
         <Route path="/building/entrance/detail" element={<EntranceDetail />} />
+        <Route
+          path="/building/entrance/detail/attachment-user"
+          element={<AttachmentUser />}
+        />
         <Route path="/building/camera" element={<Camera />} />
         <Route path="/building/camera/detail" element={<CameraDetail />} />
         <Route path="/building/detail" element={<BuildingDetail />} />
         <Route path="/user" element={<User />} />
         <Route path="/user/detail" element={<UserDetail />} />
-        {/* <Route path="/camera" element={<Camera />} /> */}
+        {user.user.role === "SYSTEM_ADMIN" ? (
+          <>
+            <Route path="/operator" element={<Operator />} />
+            <Route path="/operator/detail" element={<OperatorDetail />} />
+          </>
+        ) : null}
       </Route>
     </Routes>
   );

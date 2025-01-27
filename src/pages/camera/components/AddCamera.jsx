@@ -15,7 +15,9 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
 
   const { data, error, isLoading } = useQuery("entrance", () =>
     axios
-      .get(`/entrance?filters[building_id]=${buildingId}&sort[by]=name&sort[order]=ASC`)
+      .get(
+        `/entrance?filters[building_id]=${buildingId}&sort[by]=name&sort[order]=ASC`
+      )
       .then((res) => res.data)
   );
 
@@ -49,16 +51,6 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      {/* <div className="p-6 bg-white rounded-lg"> */}
-      {/* <button
-          type="button"
-          onClick={() =>
-            navigate(`/building/detail?buildingId=${buildingId}`)
-          }
-          className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
-        >
-          <ArrowBackIcon fontSize="medium" />
-        </button> */}
       <form
         className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 p-10 rounded-xl "
         onSubmit={handleSubmit(onSubmit)}

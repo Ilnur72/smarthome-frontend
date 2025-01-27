@@ -3,30 +3,35 @@
 import React from "react";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import { NavLink, useNavigate } from "react-router-dom";
-import { LogOutIcon, User } from "lucide-react";
+import { LogOutIcon, User, Building2 } from "lucide-react";
+import { loadState } from "../Utils/storage";
+import { jwtDecode } from "jwt-decode";
 
 function Sidebar() {
+  const token = loadState("token");
+  const { user } = jwtDecode(token);
+
   const navigate = useNavigate();
   let links = [
-    { img: ApartmentIcon, link: "Building", url: `/building` },
-    { img: User, link: "User", url: "/user" },
-    // { img: CameraIcon, link: "Camera", url: `/camera` },
-    // { img: Logout, l ink: "Logout", url: `/login` },
+    { img: ApartmentIcon, link: "Binolar", url: `/building` },
+    { img: User, link: "Foydalanuvchilar", url: "/user" },
+    // user.role ==='SYSTEM_ADMIN' ? { img: Building2, link: "Shirkat", url: `/operator` } : {},
+    // user.role ==='SYSTEM_ADMIN' ? { img: Building2, link: "Shirkat", url: `/operator` } : {},
   ];
+  if (user.role === "SYSTEM_ADMIN")
+    links.push({ img: Building2, link: "Shirkat", url: `/operator` });
   const handleLogout = () => {
-    // Tokenni localStorage yoki sessionStorage'dan o'chirish
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
 
-    // Foydalanuvchini login sahifasiga yo'naltirish
     navigate("/login");
   };
   return (
     <div>
-      <div className="w-64"></div>
+      <div className="w-56"></div>
       <div
         style={{ height: "100vh" }}
-        className="bg-white w-64 p-4 border-r-2 md:block fixed"
+        className="bg-white w-56 p-4 border-r-2 md:block fixed"
       >
         <h1
           onClick={() => navigate("/building")}
@@ -54,7 +59,7 @@ function Sidebar() {
             className="flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer"
             onClick={handleLogout}
           >
-            <LogOutIcon className="text-gray-500" />
+            <LogOutIcon />
             <span className="ml-2 text-primary">Logout</span>
           </li>
         </ul>

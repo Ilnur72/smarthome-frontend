@@ -12,15 +12,12 @@ function EntranceDetail() {
   const queryParams = new URLSearchParams(location.search);
   const entranceIdFromParams = queryParams.get("entranceId");
   const buildingIdFromParams = queryParams.get("buildingId");
-  console.log(buildingIdFromParams);
 
   const { data, error, isLoading, refetch } = useQuery(
     "entrance-detail",
-    () => axios.get(`/entrance/${entranceIdFromParams}`).then((res) => res.data)
-    // {
-    //   cacheTime: 0,
-    //   staleTime: 0,
-    // }
+    () =>
+      axios.get(`/entrance/${entranceIdFromParams}`).then((res) => res.data),
+    { keepPreviousData: true, refetchOnWindowFocus: false }
   );
   console.log(data);
 
@@ -75,7 +72,7 @@ function EntranceDetail() {
         
         </ButtonGroup>
       </div> */}
-      <ListApartment data={data.data} />
+      <ListApartment data={data.data} refetch={refetch} />
     </div>
   );
 }
