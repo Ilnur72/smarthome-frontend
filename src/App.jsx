@@ -30,6 +30,8 @@ function App() {
     if (!token) return navigate("/login");
     dispatch(jwtToken(user?.user));
   }, [token]);
+  console.log(user);
+  
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
@@ -49,7 +51,7 @@ function App() {
         <Route path="/building/detail" element={<BuildingDetail />} />
         <Route path="/user" element={<User />} />
         <Route path="/user/detail" element={<UserDetail />} />
-        {user.user.role === "SYSTEM_ADMIN" ? (
+        {user?.user?.role === "SYSTEM_ADMIN" ? (
           <>
             <Route path="/operator" element={<Operator />} />
             <Route path="/operator/detail" element={<OperatorDetail />} />
