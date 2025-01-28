@@ -30,8 +30,7 @@ function App() {
     if (!token) return navigate("/login");
     dispatch(jwtToken(user?.user));
   }, [token]);
-  console.log(user);
-  
+
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>

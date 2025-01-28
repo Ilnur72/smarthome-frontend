@@ -34,7 +34,6 @@ function Building() {
 
   const token = loadState("token");
   const { user } = jwtDecode(token);
-  console.log(user);
 
   async function showData(id) {
     const { data } = await axios.get(`/building/${id}`);

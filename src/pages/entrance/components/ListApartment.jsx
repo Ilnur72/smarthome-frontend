@@ -15,7 +15,6 @@ import iconDelete from "../../../assets/ActionIcon/delete.svg";
 import axios from "axios";
 
 function ListApartment({ data, refetch }) {
-  console.log(data);
   const navigate = useNavigate();
 
   return (

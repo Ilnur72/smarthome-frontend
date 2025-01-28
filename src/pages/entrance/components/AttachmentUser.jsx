@@ -38,8 +38,8 @@ function AttachmentUser() {
   const [selectedId, setSelectedId] = React.useState(null);
   const [search, setSearch] = React.useState("");
 
-  const token = loadState("token");
-  const { user } = jwtDecode(token);
+  // const token = loadState("token");
+  // const { user } = jwtDecode(token);
 
   const navigate = useNavigate();
 
@@ -96,16 +96,14 @@ function AttachmentUser() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {user.role === "SYSTEM_ADMIN" ? (
-            <button
-              onClick={() => {
-                setIsOpen(true);
-              }}
-              className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
-            >
-              Yangi user qo'shish
-            </button>
-          ) : null}
+          <button
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
+          >
+            Yangi user qo'shish
+          </button>
         </div>
       </div>
       <AddUser refetch={refetch} setIsOpen={setIsOpen} isOpen={isOpen} />
@@ -141,128 +139,85 @@ function AttachmentUser() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.data.data?.map((item, index) => (
-              <TableRow
-                key={item.id}
-                sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                }}
-              >
-                <TableCell
+            {search && data?.data?.data?.length > 0 ? (
+              data?.data.data?.map((item, index) => (
+                <TableRow
+                  key={item.id}
                   sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
+                    "&:last-child td, &:last-child th": { border: 0 },
                   }}
-                  align="center"
                 >
-                  {item.fullname}
-                </TableCell>
+                  <TableCell
+                    sx={{
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#092C4C",
+                      paddingY: 0.8,
+                    }}
+                    align="center"
+                  >
+                    {item.fullname}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#092C4C",
+                      paddingY: 0.8,
+                    }}
+                    align="center"
+                  >
+                    {item.phone}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#092C4C",
+                      paddingY: 0.8,
+                    }}
+                    align="center"
+                  >
+                    {item.email}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#092C4C",
+                      paddingY: 0.8,
+                    }}
+                    align="center"
+                  >
+                    <Checkbox
+                      checked={selectedId === item.id}
+                      onChange={() =>
+                        setSelectedId((prevSelectedId) =>
+                          prevSelectedId === item.id ? null : item.id
+                        )
+                      }
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
                 <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
-                >
-                  {item.phone}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
-                >
-                  {item.email}
-                </TableCell>
-                <TableCell
+                  colSpan={4}
                   sx={{
                     fontSize: 14,
                     fontWeight: 600,
                     color: "#092C4C",
-                    paddingY: 0.8,
+                    paddingY: 1,
                   }}
                   align="center"
                 >
-                  <Checkbox
-                    checked={selectedId === item.id}
-                    onChange={() =>
-                      setSelectedId((prevSelectedId) =>
-                        prevSelectedId === item.id ? null : item.id
-                      )
-                    }
-                  />
-                  {/* <IconButton
-                    onClick={() => {
-                      navigate(`/user/detail?userId=${item.id}`);
-                    }}
-                    aria-label="view"
-                    size="medium"
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
-                        },
-                      },
-                    }}
-                  >
-                    <img src={iconView} alt="" />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      showData(item.id);
-                    }}
-                    aria-label="edit"
-                    size="medium"
-                    sx={{
-                      mx: 1,
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
-                        },
-                      },
-                    }}
-                  >
-                    <img src={iconEdit} alt="" />
-                  </IconButton> */}
-                  {/* <IconButton
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
-                        },
-                      },
-                    }}
-                    onClick={async () => {
-                      await axios.delete(`/user/${item.id}`);
-                      refetch();
-                    }}
-                    aria-label="delete"
-                    size="medium"
-                  >
-                    <img src={iconDelete} alt="" />
-                  </IconButton> */}
+                  {search
+                    ? "Foydalanuvchilar topilmadi"
+                    : "Qidiruv uchun so‘z kiriting"}
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>

@@ -12,7 +12,6 @@ function CameraDetail() {
   const queryParams = new URLSearchParams(location.search);
   const cameraIdFromParams = queryParams.get("cameraId");
   const buildingIdFromParams = queryParams.get("buildingId");
-  console.log(buildingIdFromParams);
 
   const { data, error, isLoading, refetch } = useQuery(
     "camera-detail",

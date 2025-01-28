@@ -8,10 +8,13 @@ import { loadState } from "../Utils/storage";
 import { jwtDecode } from "jwt-decode";
 
 function Sidebar() {
+  const navigate = useNavigate();
   const token = loadState("token");
+  if(!token) return navigate('/login')
+  
   const { user } = jwtDecode(token);
 
-  const navigate = useNavigate();
+
   let links = [
     { img: ApartmentIcon, link: "Binolar", url: `/building` },
     { img: User, link: "Foydalanuvchilar", url: "/user" },

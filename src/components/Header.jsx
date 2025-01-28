@@ -10,7 +10,7 @@ function Header() {
 
   const url = ["/building/add-home"];
   const shouldHidePage = url.includes(location.pathname);
-console.log(shouldHidePage)
+
   const buttonConfig = {
     "/building": {
       label: "+ Uy qo'shish",

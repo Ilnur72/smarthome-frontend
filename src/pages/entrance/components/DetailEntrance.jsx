@@ -19,7 +19,6 @@ function EntranceDetail() {
       axios.get(`/entrance/${entranceIdFromParams}`).then((res) => res.data),
     { keepPreviousData: true, refetchOnWindowFocus: false }
   );
-  console.log(data);
 
   if (isLoading)
     return (

@@ -48,7 +48,6 @@ function AddBuilding() {
     "operator",
     () => axios.get("/operator").then((res) => res.data)
   );
-  console.log(operatorData);
 
   const fetchDistricts = async (id) => {
     try {
@@ -70,9 +69,7 @@ function AddBuilding() {
     return null;
   };
 
-  const onSubmit = async (formData) => {
-    console.log(formData);
-    
+  const onSubmit = async (formData) => {    
     if (+formData.apartments_count <= +formData.entrance_count) {
       setError("apartments_count", {
         type: "manual",
@@ -276,7 +273,6 @@ function AddBuilding() {
                 }
                 onChange={(e) => {
                   field.onChange(e);
-                  // fetchEntrance(e.value);
                 }}
                 placeholder="Shirkat"
                 isSearchable

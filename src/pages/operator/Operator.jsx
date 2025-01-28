@@ -53,7 +53,6 @@ function Operator() {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(data);
 
   React.useEffect(() => {
     refetch();

@@ -5,17 +5,18 @@ import { useForm } from "react-hook-form";
 
 function EditOperator({ showOperator, setShowOperator, refetch }) {
   if (!showOperator.isOpen) return null;
-  const [loading, setLoading] = React.useState(false);
-  const { register, handleSubmit, reset } = useForm();
-  console.log(showOperator);
-  
+  const [isChange, setIsChange] = React.useState(false);
+  const { register, handleSubmit, reset, formState } = useForm();
+
   const onSubmit = async (formData) => {
-    setLoading(true);
     await axios.put(`/operator/${showOperator.data.id}`, formData);
     reset();
     refetch();
-    setLoading(false);
     setShowOperator({ isOpen: false });
+  };
+
+  const handleChangePassword = () => {
+    setIsChange(!isChange);
   };
 
   return (
@@ -51,7 +52,6 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
             min={1}
             className="border p-2 rounded w-full"
             defaultValue={showOperator.data.email}
-
           />
         </div>
         {/* <div>
@@ -66,7 +66,58 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
 
           />
         </div> */}
-        <div className="flex justify-between mt-4">
+        <div className="justify-between mt-4 grid grid-cols-1 gap-3">
+          {isChange ? (
+            <div className="flex items-center gap-2 transition-transform duration-300 ease-in-out transform translate-x-0">
+              <Button
+                variant="outlined"
+                onClick={handleChangePassword}
+                type="button"
+                sx={{
+                  color: "#00BDD6FF",
+                  borderColor: "#00BDD6FF",
+                  borderRadius: "4px",
+                }}
+              >
+                Back
+              </Button>
+              <input
+                style={{ borderColor: "#00BDD6FF" }}
+                type="password"
+                placeholder="New Password"
+                {...register("password")}
+                className="border h-full px-2 rounded w-full focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          ) : (
+            <Button
+              onClick={handleChangePassword}
+              type="button"
+              variant="contained"
+              disabled={formState.isSubmitting}
+              color="secondary"
+              sx={{
+                color: "#fff",
+                borderRadius: "4px",
+              }}
+              className="transition-transform duration-300 ease-in-out transform"
+            >
+              {formState.isSubmitting ? "Loading..." : "Change Password"}
+            </Button>
+          )}
+          {/* <div></div> */}
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              background: "#00BDD6FF",
+              color: "#fff",
+              borderRadius: "4px",
+            }}
+            disabled={formState.isSubmitting}
+          >
+            {formState.isSubmitting ? "Loading..." : "Submit"}
+          </Button>
           <Button
             variant="outlined"
             onClick={() => setShowOperator({ isOpen: false })}
@@ -78,18 +129,6 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
             }}
           >
             Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
-              borderRadius: "4px",
-            }}
-            disabled={loading}
-          >
-            {loading ? "Loading..." : "Submit"}
           </Button>
         </div>
       </form>

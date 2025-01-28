@@ -14,7 +14,7 @@ import axios from "axios";
 
 function ListOperatorBuilding({ data, refetch }) {
   const [loadingId, setLoadingId] = useState(null);
-  console.log(data);
+
   const handleDelete = async (id) => {
     try {
       setLoadingId(id);

@@ -24,6 +24,8 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import AddUser from "./components/AddUser";
 import EditUser from "./components/EditUser";
+import { loadState } from "../../Utils/storage";
+import { jwtDecode } from "jwt-decode";
 // import EditUser from "./components/EditUser";
 
 function User() {
@@ -32,6 +34,9 @@ function User() {
   const navigate = useNavigate();
   const [showUser, setShowUser] = React.useState({ isOpen: false });
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const token = loadState("token");
+  const { user } = jwtDecode(token);
 
   async function showData(id) {
     const { data } = await axios.get(`/user/${id}`);
@@ -45,7 +50,9 @@ function User() {
     () =>
       axios
         .get(
-          `/user?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC`
+          `/user?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC${
+            user.role === "OPERATOR" ? "&filters[staff_id]=" + user.id : ""
+          }`
         )
         .then((res) => res.data)
         .catch((e) => console.log(e)),
