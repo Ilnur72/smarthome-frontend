@@ -15,6 +15,7 @@ import { saveState } from "../../Utils/storage";
 //img
 import Visibility from "../../assets/visibility.svg";
 import VisibilityOff from "../../assets/visibilityOff.svg";
+import { jwtDecode } from "jwt-decode";
 
 const Login = ({ refetchData }) => {
   const navigate = useNavigate();
@@ -26,17 +27,22 @@ const Login = ({ refetchData }) => {
   const submit = async (dataValue) => {
     try {
       const { data } = await axios.post("/auth/login-staff", dataValue);
+        const { user } = jwtDecode(data.data.token);
+      console.log(data);
+      
       saveState("token", data.data.token);
       if (data.data.token) {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.data.token}`;
-        navigate("/building");
+        navigate(user.role ==='OPERATOR' ? '/operator/profile' : "/building");
         toast.success("Siz tizimga muvaffaqiyatli kirdingiz.");
         reset();
         refetchData();
       }
     } catch (error) {      
+      console.log(error);
+      
       toast.error(error.response?.data.message);
     }
   };

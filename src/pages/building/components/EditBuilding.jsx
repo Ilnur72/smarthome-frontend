@@ -1,7 +1,7 @@
 import { Button, Modal } from "@mui/material";
 import React, { useEffect } from "react";
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import {
   MapContainer,
@@ -12,6 +12,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import Select from "react-select";
 
 // Leaflet marker setup
 delete L.Icon.Default.prototype._getIconUrl;
@@ -30,10 +31,23 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
     showBuilding.data?.location?.lat || 41.2995,
     showBuilding.data?.location?.lng || 69.2401,
   ]);
-  const { register, handleSubmit, reset } = useForm();
 
-  const { data, error, isLoading } = useQuery("region", () =>
+  const { register, handleSubmit, reset, control } = useForm({
+    defaultValues: {
+      operator_id: {
+        value: showBuilding.data.operator_id,
+        label: showBuilding.data.operator_name,
+      },
+    },
+  });
+
+  const { data } = useQuery("region", () =>
     axios.get("/region").then((res) => res.data)
+  );
+
+  const { data: operatorData, isLoading: operatorLoading } = useQuery(
+    "operator",
+    () => axios.get("/operator").then((res) => res.data)
   );
 
   useEffect(() => {
@@ -76,6 +90,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
       entrance_count: +formData.entrance_count,
       district_id: formData.district_id || showBuilding.data.address.districtId,
       location: { lat: position[0], lng: position[1] },
+      operator_id: formData.operator_id.value,
     });
     refetch();
     reset();
@@ -97,6 +112,37 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
         className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 w-96 p-10 rounded-xl"
         onSubmit={handleSubmit(onSubmit)}
       >
+        <div>
+          <label className="block mb-2">Shirkatni tanlang*</label>
+          <Controller
+            name="operator_id"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                // defaultValue={
+                //   operatorLoading ||
+                //   operatorData.data.data[
+                //     operatorData?.data?.data.findIndex(
+                //       (item) => item.id === showBuilding.data.operator_id
+                //     )
+                //   ]
+                // }
+                options={
+                  operatorLoading ||
+                  operatorData.data?.data?.map((item) => {
+                    return { value: item.id, label: item.name };
+                  })
+                }
+                onChange={(e) => {
+                  field.onChange(e);
+                }}
+                placeholder="Shirkat"
+                isSearchable
+              />
+            )}
+          />
+        </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block mb-2">Viloyat</label>
@@ -108,7 +154,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               defaultValue={showBuilding.data.address.regionId || ""}
             >
               <option value="" disabled>
-                "Viloyatni tanlang"
+                Viloyatni tanlang
               </option>
               {data?.data?.region.map((region) => (
                 <option key={region.id} value={region.id}>
@@ -127,7 +173,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               defaultValue={showBuilding.data?.address?.districtId || ""}
             >
               <option value="" disabled>
-                "Tumanni tanlang"
+                Tumanni tanlang
               </option>
               {districts.map((district) => (
                 <option key={district.id} value={district.id}>

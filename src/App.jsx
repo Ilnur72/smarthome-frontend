@@ -20,6 +20,7 @@ import UserDetail from "./pages/user/components/DetailUser";
 import Operator from "./pages/operator/Operator";
 import OperatorDetail from "./pages/operator/components/DetailOperator";
 import AttachmentUser from "./pages/entrance/components/AttachmentUser";
+import OperatorProfile from "./pages/operatorProfile/OperatorProfile";
 
 function App() {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ function App() {
         <Route path="/building/detail" element={<BuildingDetail />} />
         <Route path="/user" element={<User />} />
         <Route path="/user/detail" element={<UserDetail />} />
+        <Route path="/operator/profile" element={<OperatorProfile />} />
         {user?.user?.role === "SYSTEM_ADMIN" ? (
           <>
             <Route path="/operator" element={<Operator />} />

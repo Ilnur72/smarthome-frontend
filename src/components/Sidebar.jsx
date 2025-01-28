@@ -3,7 +3,7 @@
 import React from "react";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import { NavLink, useNavigate } from "react-router-dom";
-import { LogOutIcon, User, Building2 } from "lucide-react";
+import { LogOutIcon, Users, Building2, User } from "lucide-react";
 import { loadState } from "../Utils/storage";
 import { jwtDecode } from "jwt-decode";
 
@@ -17,12 +17,14 @@ function Sidebar() {
 
   let links = [
     { img: ApartmentIcon, link: "Binolar", url: `/building` },
-    { img: User, link: "Foydalanuvchilar", url: "/user" },
+    { img: Users, link: "Foydalanuvchilar", url: "/user" },
     // user.role ==='SYSTEM_ADMIN' ? { img: Building2, link: "Shirkat", url: `/operator` } : {},
     // user.role ==='SYSTEM_ADMIN' ? { img: Building2, link: "Shirkat", url: `/operator` } : {},
   ];
   if (user.role === "SYSTEM_ADMIN")
     links.push({ img: Building2, link: "Shirkat", url: `/operator` });
+  else  links.unshift ({ img: User, link: "Porfile", url: `/operator/profile` });
+  // else links.push({img})
   const handleLogout = () => {
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");

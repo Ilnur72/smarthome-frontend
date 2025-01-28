@@ -36,9 +36,14 @@ function Building() {
   const { user } = jwtDecode(token);
 
   async function showData(id) {
+    const { data: operatorData } = await axios.get(`/operator`);
     const { data } = await axios.get(`/building/${id}`);
+    data.data.operator_name = await operatorData.data.data.find(
+      (item) => item.id === data.data.operator_id
+    )?.name;
+    console.log(data.data);
 
-    setShowBuilding({ isOpen: true, data: data.data });
+    setShowBuilding({ isOpen: true, data: data.data, operatorData: operatorData.data });
   }
 
   const { data, error, isLoading, refetch } = useQuery(
