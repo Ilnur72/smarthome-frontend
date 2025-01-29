@@ -180,7 +180,7 @@ function User() {
                   }}
                   align="center"
                 >
-                  {item.userApartments.length
+                  {item.userApartments?.length
                     ? item.userApartments[0]?.apartment?.entrance.buildings.name
                     : "Xonadon hali mavjud emas"}
                 </TableCell>
