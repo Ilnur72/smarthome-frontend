@@ -53,18 +53,6 @@ function EditUser({ showUser, setShowUser, refetch }) {
           />
         </div>
 
-        <div>
-          <label className="block mb-2">email</label>
-          <input
-            type="string"
-            placeholder="Login"
-            {...register("email")}
-            required={true}
-            min={1}
-            className="border p-2 rounded w-full"
-            defaultValue={showUser.data.email}
-          />
-        </div>
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"

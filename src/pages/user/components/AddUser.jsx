@@ -12,7 +12,6 @@ function AddUser({ refetch, setIsOpen, isOpen }) {
     try {
       const result = await axios.post("/user", {
         phone: formData.phone,
-        email: formData.email,
         fullname: formData.fullname,
       });
 
@@ -65,17 +64,6 @@ function AddUser({ refetch, setIsOpen, isOpen }) {
               className="border p-2 rounded w-full"
             />
           </div>
-        </div>
-        <div>
-          <label className="block mb-2">Email*</label>
-          <input
-            type="email"
-            placeholder="email"
-            {...register("email")}
-            required={true}
-            min={1}
-            className="border p-2 rounded w-full"
-          />
         </div>
         <div className="flex justify-between mt-4">
           <Button

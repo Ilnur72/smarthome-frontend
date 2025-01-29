@@ -61,9 +61,6 @@ function UserDetail() {
           {data.data.fullname}
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>email:</strong> {data.data.email}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
           <strong>Phone:</strong> {data.data.phone}
         </Typography>
         <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>

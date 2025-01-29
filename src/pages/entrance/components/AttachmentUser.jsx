@@ -128,12 +128,6 @@ function AttachmentUser() {
                 sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
                 align="center"
               >
-                email
-              </TableCell>
-              <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-                align="center"
-              >
                 action
               </TableCell>
             </TableRow>
@@ -168,17 +162,6 @@ function AttachmentUser() {
                     align="center"
                   >
                     {item.phone}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: "#092C4C",
-                      paddingY: 0.8,
-                    }}
-                    align="center"
-                  >
-                    {item.email}
                   </TableCell>
                   <TableCell
                     sx={{

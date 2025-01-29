@@ -26,11 +26,15 @@ function BuildingDetail() {
       </div>
     );
   const address = data?.data.address;
-
+  console.log(data);
   return (
     <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
       <Typography variant="h5" component="h2" sx={{ marginBottom: 2 }}>
         Building Detail
+      </Typography>
+      <Typography variant="body1" sx={{ marginBottom: 1 }}>
+        <strong>Shirkat nomi:</strong>
+        {data.data?.operator?.name}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 1 }}>
         <strong>Uy manzili:</strong>
@@ -55,9 +59,7 @@ function BuildingDetail() {
         <Button
           variant="contained"
           color="inherit"
-          onClick={() =>
-            navigate(`/building`)
-          }
+          onClick={() => navigate(`/building`)}
         >
           <ArrowBackIcon fontSize="medium" />
           Back
