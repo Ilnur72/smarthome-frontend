@@ -117,6 +117,18 @@ function User() {
                 sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
                 align="center"
               >
+                Xonadon raqami
+              </TableCell>
+              <TableCell
+                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                align="center"
+              >
+                Bino raqami
+              </TableCell>
+              <TableCell
+                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
+                align="center"
+              >
                 Tel raqami
               </TableCell>
               <TableCell
@@ -145,6 +157,32 @@ function User() {
                   align="center"
                 >
                   {item.fullname}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: "#092C4C",
+                    paddingY: 0.8,
+                  }}
+                  align="center"
+                >
+                  {item.userApartments.length
+                    ? item.userApartments[0].apartment.number
+                    : "Xonadon hali mavjud emas"}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: "#092C4C",
+                    paddingY: 0.8,
+                  }}
+                  align="center"
+                >
+                  {item.userApartments.length
+                    ? item.userApartments[0]?.apartment?.entrance.buildings.name
+                    : "Xonadon hali mavjud emas"}
                 </TableCell>
                 <TableCell
                   sx={{

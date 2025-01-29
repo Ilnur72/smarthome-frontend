@@ -43,10 +43,14 @@ function Building() {
     )?.name;
     console.log(data.data);
 
-    setShowBuilding({ isOpen: true, data: data.data, operatorData: operatorData.data });
+    setShowBuilding({
+      isOpen: true,
+      data: data.data,
+      operatorData: operatorData.data,
+    });
   }
 
-  const { data, error, isLoading, refetch } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     "building",
 
     () =>

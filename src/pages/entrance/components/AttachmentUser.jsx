@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Pagination,
@@ -19,12 +18,10 @@ import {
   TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import AddUser from "../../user/components/AddUser";
 import { useQuery, useQueryClient } from "react-query";
 import { Commet } from "react-loading-indicators";
 import axios from "axios";
-import { loadState } from "../../../Utils/storage";
-import { jwtDecode } from "jwt-decode";
+import AddUser from "./AddUser";
 
 function AttachmentUser() {
   const queryParams = new URLSearchParams(location.search);
@@ -38,22 +35,24 @@ function AttachmentUser() {
   const [selectedId, setSelectedId] = React.useState(null);
   const [search, setSearch] = React.useState("");
 
-  // const token = loadState("token");
-  // const { user } = jwtDecode(token);
+  const limitLetter = 8;
 
   const navigate = useNavigate();
 
   const { data, isLoading, refetch } = useQuery(
-    ["user", search, page, row],
+    ["user", page, row],
 
     () =>
       axios
         .get(
-          `/user?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC&search=${search}`
+          `/user?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC&search=${
+            search.length < limitLetter ? search : ""
+          }`
         )
         .then((res) => res.data)
         .catch((e) => console.log(e)),
     {
+      enabled: (search || "").length >= 8,
       staleTime: 1000 * 60 * 5,
       cacheTime: 1000 * 60 * 10,
       keepPreviousData: true,
@@ -106,7 +105,12 @@ function AttachmentUser() {
           </button>
         </div>
       </div>
-      <AddUser refetch={refetch} setIsOpen={setIsOpen} isOpen={isOpen} />
+      <AddUser
+        refetch={refetch}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        apartmentIdFromParams={apartmentIdFromParams}
+      />
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
@@ -133,7 +137,7 @@ function AttachmentUser() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {search && data?.data?.data?.length > 0 ? (
+            {search.length > limitLetter && data?.data?.data?.length > 0 ? (
               data?.data.data?.map((item, index) => (
                 <TableRow
                   key={item.id}
@@ -195,7 +199,7 @@ function AttachmentUser() {
                   }}
                   align="center"
                 >
-                  {search
+                  {search.length > limitLetter
                     ? "Foydalanuvchilar topilmadi"
                     : "Qidiruv uchun so‘z kiriting"}
                 </TableCell>
