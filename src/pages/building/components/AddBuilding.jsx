@@ -69,7 +69,7 @@ function AddBuilding() {
     return null;
   };
 
-  const onSubmit = async (formData) => {    
+  const onSubmit = async (formData) => {
     if (+formData.apartments_count <= +formData.entrance_count) {
       setError("apartments_count", {
         type: "manual",
@@ -84,7 +84,7 @@ function AddBuilding() {
       apartments_count: +formData.apartments_count,
       entrance_count: +formData.entrance_count,
       location: { lat: position[0], lng: position[1] },
-      operator_id: formData.operator_id.value
+      operator_id: formData.operator_id.value,
     });
     if (result.data.success) {
       dispatch(setBuildingId(result.data.data.id));
@@ -110,7 +110,10 @@ function AddBuilding() {
         <ArrowBackIcon fontSize="medium" />
       </button>
 
-      <form className="w-1/2 mx-auto flex gap-1" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="w-1/2 mx-auto flex gap-1"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div>
           <div className="grid grid-cols-2 gap-4">
             {/* Viloyat tanlash */}
@@ -152,6 +155,29 @@ function AddBuilding() {
                 ))}
               </select>
             </div>
+            <div>
+          <label className="block mb-2">Shirkatni tanlang*</label>
+          <Controller
+            name="operator_id"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={
+                  operatorLoading ||
+                  operatorData.data?.data?.map((item) => {
+                    return { value: item.id, label: item.name };
+                  })
+                }
+                onChange={(e) => {
+                  field.onChange(e);
+                }}
+                placeholder="Shirkat"
+                isSearchable
+              />
+            )}
+          />
+        </div>
 
             {/* Manzil */}
             <div>
@@ -256,29 +282,6 @@ function AddBuilding() {
               )}
             </button>
           </div>
-        </div>
-        <div>
-          <label className="block mb-2">Shirkatni tanlang*</label>
-          <Controller
-            name="operator_id"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={
-                  operatorLoading ||
-                  operatorData.data?.data?.map((item) => {
-                    return { value: item.id, label: item.name };
-                  })
-                }
-                onChange={(e) => {
-                  field.onChange(e);
-                }}
-                placeholder="Shirkat"
-                isSearchable
-              />
-            )}
-          />
         </div>
       </form>
     </div>
