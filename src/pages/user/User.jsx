@@ -167,8 +167,8 @@ function User() {
                   }}
                   align="center"
                 >
-                  {item.userApartments.length
-                    ? item.userApartments[0].apartment.number
+                  {item.userApartments?.length
+                    ? item.userApartments[0]?.apartment?.number
                     : "Xonadon hali mavjud emas"}
                 </TableCell>
                 <TableCell
