@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
-import { Commet } from "react-loading-indicators";
 import axios from "axios";
 import AddUser from "./AddUser";
 
@@ -38,21 +37,19 @@ function AttachmentUser() {
   const limitLetter = 8;
 
   const navigate = useNavigate();
+  const queryKey = search.length >= 7 ? ["user", search, page, row] : null;
 
-  const { data, isLoading, refetch } = useQuery(
-    ["user", page, row],
-
+  const { data, refetch } = useQuery(
+    queryKey,
     () =>
       axios
         .get(
-          `/user?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC&search=${
-            search.length < limitLetter ? search : ""
-          }`
+          `/user?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC&search=${search}`
         )
         .then((res) => res.data)
         .catch((e) => console.log(e)),
     {
-      enabled: (search || "").length >= 8,
+      enabled: !!queryKey,
       staleTime: 1000 * 60 * 5,
       cacheTime: 1000 * 60 * 10,
       keepPreviousData: true,
@@ -78,12 +75,6 @@ function AttachmentUser() {
     if (data?.data.data.length === 0 && page !== 1) setPage(page - 1);
   }, [page, row, refetch]);
 
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center h-2/3">
-        <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
-      </div>
-    );
   return (
     <div>
       <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
