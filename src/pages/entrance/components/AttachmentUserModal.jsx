@@ -71,7 +71,7 @@ function AttachmentUser({ setIsOpen, isOpen, apartmentId }) {
                 <Select
                   {...field}
                   options={
-                    search.length < 6
+                    search.length < 8
                       ? []
                       : data.data?.data?.map((item) => ({
                           value: item.id,
