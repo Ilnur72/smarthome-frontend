@@ -6,12 +6,16 @@ import { Commet } from "react-loading-indicators";
 import axios from "axios";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ListApartment from "./ListApartment";
+import AttachmentUser from "./AttachmentUserModal";
 
 function EntranceDetail() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const entranceIdFromParams = queryParams.get("entranceId");
   const buildingIdFromParams = queryParams.get("buildingId");
+
+  const [isOpen, setIsOpen] = React.useState(false);
+  
 
   const { data, error, isLoading, refetch } = useQuery(
     "entrance-detail",
@@ -29,6 +33,7 @@ function EntranceDetail() {
 
   return (
     <div>
+
       <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
         <Typography variant="h5" component="h2" sx={{ marginBottom: 2 }}>
           Entrance Detail

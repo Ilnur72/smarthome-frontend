@@ -4,12 +4,15 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "react-query";
 
-function AddUser({ refetch, setIsOpen, isOpen, apartmentIdFromParams }) {
+function AddUser({
+  setIsOpen,
+  isOpen,
+  apartmentIdFromParams,
+  AttachmentUserIsOpen,
+}) {
   const { register, handleSubmit, reset, formState } = useForm();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const onSubmit = async (formData) => {
     try {
@@ -21,14 +24,11 @@ function AddUser({ refetch, setIsOpen, isOpen, apartmentIdFromParams }) {
         user_id: result.data?.data?.id,
         apartment_id: apartmentIdFromParams,
       });
-      console.log(result.data);
       if (result.data.success) {
-        console.log("ifga");
         queryClient.invalidateQueries("entrance-detail");
-        refetch();
         reset();
         setIsOpen(false);
-        navigate(-1);
+        AttachmentUserIsOpen(false);
       }
     } catch (error) {
       if (error.response?.data.statusCode === 400) {

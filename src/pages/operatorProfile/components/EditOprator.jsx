@@ -13,8 +13,6 @@ import VisibilityOff from "../../../assets/visibilityOff.svg";
 
 function EditOperatorProfile({ operator, isOpen, setIsOpen, refetch }) {
   if (!isOpen) return null;
-  console.log(operator);
-
   const [isChange, setIsChange] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -22,7 +20,6 @@ function EditOperatorProfile({ operator, isOpen, setIsOpen, refetch }) {
 
   const onSubmit = async (formData) => {
     if (!isChange) delete formData.password;
-    console.log(formData);  
     await axios.put(`/operator/${operator.id}`, formData);
     reset();
     refetch();

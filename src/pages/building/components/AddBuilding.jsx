@@ -156,28 +156,28 @@ function AddBuilding() {
               </select>
             </div>
             <div>
-          <label className="block mb-2">Shirkatni tanlang*</label>
-          <Controller
-            name="operator_id"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={
-                  operatorLoading ||
-                  operatorData.data?.data?.map((item) => {
-                    return { value: item.id, label: item.name };
-                  })
-                }
-                onChange={(e) => {
-                  field.onChange(e);
-                }}
-                placeholder="Shirkat"
-                isSearchable
+              <label className="block mb-2">Shirkatni tanlang*</label>
+              <Controller
+                name="operator_id"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={
+                      operatorLoading ||
+                      operatorData.data?.data?.map((item) => {
+                        return { value: item.id, label: item.name };
+                      })
+                    }
+                    onChange={(e) => {
+                      field.onChange(e);
+                    }}
+                    placeholder="Shirkat"
+                    isSearchable
+                  />
+                )}
               />
-            )}
-          />
-        </div>
+            </div>
 
             {/* Manzil */}
             <div>

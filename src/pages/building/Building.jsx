@@ -41,8 +41,6 @@ function Building() {
     data.data.operator_name = await operatorData.data.data.find(
       (item) => item.id === data.data.operator_id
     )?.name;
-    console.log(data.data);
-
     setShowBuilding({
       isOpen: true,
       data: data.data,

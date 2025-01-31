@@ -28,7 +28,6 @@ const Login = ({ refetchData }) => {
     try {
       const { data } = await axios.post("/auth/login-staff", dataValue);
         const { user } = jwtDecode(data.data.token);
-      console.log(data);
       
       saveState("token", data.data.token);
       if (data.data.token) {
@@ -40,9 +39,7 @@ const Login = ({ refetchData }) => {
         reset();
         refetchData();
       }
-    } catch (error) {      
-      console.log(error);
-      
+    } catch (error) {            
       toast.error(error.response?.data.message);
     }
   };
