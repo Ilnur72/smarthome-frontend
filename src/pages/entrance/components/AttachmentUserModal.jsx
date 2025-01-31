@@ -75,7 +75,7 @@ function AttachmentUser({ setIsOpen, isOpen, apartmentId }) {
                       ? []
                       : data.data?.data?.map((item) => ({
                           value: item.id,
-                          label: item.phone,
+                          label: `${item.fullname} Tel:${item.phone} `,
                         }))
                   }
                   onChange={(e) => field.onChange(e)}
