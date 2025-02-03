@@ -13,8 +13,6 @@ function AddEntrance({
   isOpen,
   lastApartmentNumber,
 }) {
-
-  
   // const { isOpen, isClose } = useSelector((state) => state.modal);
   const { register, handleSubmit, reset, formState } = useForm();
 
@@ -53,7 +51,7 @@ function AddEntrance({
             placeholder="padyez nomi"
             {...register("name")}
             required={true}
-            className="border p-2 rounded w-full"
+            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -65,8 +63,8 @@ function AddEntrance({
               {...register("first_apartment_number")}
               required={true}
               min={lastApartmentNumber + 1}
-              className="border p-2 rounded w-full"
-            />
+              className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
           </div>
           <div>
             <label className="block mb-2 opacity-0">*</label>
@@ -76,8 +74,8 @@ function AddEntrance({
               {...register("last_apartment_number")}
               required={true}
               min={lastApartmentNumber + 1}
-              className="border p-2 rounded w-full"
-            />
+              className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
           </div>
         </div>
         <div>
@@ -88,7 +86,7 @@ function AddEntrance({
             {...register("intercom_ip")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
@@ -100,7 +98,7 @@ function AddEntrance({
             {...register("intercom_login")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -111,7 +109,7 @@ function AddEntrance({
             {...register("intercom_password")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div className="flex justify-between mt-4">
@@ -122,8 +120,6 @@ function AddEntrance({
             // className="bg-slate-400 text-white px-4 py-2 rounded"
             sx={{
               // paddingY: "16px",
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >
@@ -134,7 +130,6 @@ function AddEntrance({
             variant="contained"
             disabled={formState.isSubmitting}
             sx={{
-              background: "#00BDD6FF",
               color: "#fff",
               // paddingY: "16px",
               borderRadius: "4px",

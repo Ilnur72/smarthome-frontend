@@ -1,23 +1,27 @@
 import React from "react";
-import { Button, Paper, Typography, Box } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Commet } from "react-loading-indicators";
 import axios from "axios";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import EntranceList from "../../entrance/EntranceList";
+import CameraList from "../../camera/CameraList";
 
 function BuildingDetail() {
   const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
+  const queryParams = new URLSearchParams(window.location.search);
   const buildingIdFromParams = queryParams.get("buildingId");
 
   const { data, error, isLoading, refetch } = useQuery(
-    "building-detail",
-    () => axios.get(`/building/${buildingIdFromParams}`).then((res) => res.data)
-    // {
-    //   cacheTime: 0,
-    //   staleTime: 0,
-    // }
+    ["building-detail", buildingIdFromParams],
+    () =>
+      axios.get(`/building/${buildingIdFromParams}`).then((res) => res.data),
+    {
+      enabled: !!buildingIdFromParams,
+      //   cacheTime: 0,
+      //   staleTime: 0,
+    }
   );
   if (isLoading)
     return (
@@ -25,64 +29,67 @@ function BuildingDetail() {
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
+    console.log(data);
+    
   const address = data?.data.address;
   return (
-    <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
-      <Typography variant="h5" component="h2" sx={{ marginBottom: 2 }}>
-        Building Detail
-      </Typography>
-      <Typography variant="body1" sx={{ marginBottom: 1 }}>
-        <strong>Shirkat nomi:</strong>
-        {data.data?.operator?.name}
-      </Typography>
-      <Typography variant="body1" sx={{ marginBottom: 1 }}>
-        <strong>Uy manzili:</strong>
-        {`${address?.region}, ${address?.district}, ${address?.street}`}
-      </Typography>
-      <Typography variant="body1" sx={{ marginBottom: 1 }}>
-        <strong>Qavatlar soni:</strong> {data.data.floor}
-      </Typography>
-      <Typography variant="body1" sx={{ marginBottom: 1 }}>
-        <strong>Xonadonlar soni:</strong> {data.data.apartments_count}
-      </Typography>
-      <Typography variant="body1" sx={{ marginBottom: 1 }}>
-        <strong>Podyezdlar soni:</strong> {data.data.entrance_count}
-      </Typography>
-      <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
-        {/* <button
-          type="button"
-          onClick={() => navigate("/building")}
-          className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
-        >
-        </button> */}
-        <Button
-          variant="contained"
-          color="inherit"
-          onClick={() => navigate(`/building`)}
-        >
-          <ArrowBackIcon fontSize="medium" />
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() =>
-            navigate(`/building/entrance?buildingId=${data.data.id}`)
-          }
-        >
-          Entrance
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() =>
-            navigate(`/building/camera?buildingId=${data.data.id}`)
-          }
-        >
-          Camera
-        </Button>
-      </Box>
-    </Paper>
+    <div className="bg-gray-50">
+      <div className="max-w-7xl mx-auto flex flex-col gap-3">
+        <div className="bg-white rounded-lg shadow-sm border-b border-gray-200 p-3">
+          <h2 className="mb-2">Building Detail</h2>
+          <p className="font-normal">
+            <strong className="text-gray-700">Shirkat nomi:</strong>
+            {data.data?.operator?.name}
+          </p>
+          <p className="font-normal">
+            <strong className="text-gray-700">Uy manzili:</strong>
+            {`${address?.region}, ${address?.district}, ${address?.street}`}
+          </p>
+          <p className="font-normal">
+            <strong className="text-gray-700">Qavatlar soni:</strong>{" "}
+            {data.data.floor}
+          </p>
+          <p className="font-normal">
+            <strong className="text-gray-700">Xonadonlar soni:</strong>{" "}
+            {data.data.apartments_count}
+          </p>
+          <p className="font-normal">
+            <strong className="text-gray-700">Podyezdlar soni:</strong>{" "}
+            {data.data.entrance_count}
+          </p>
+          <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => navigate(`/building`)}
+            >
+              <ArrowBackIcon fontSize="medium" />
+              Back
+            </Button>
+            {/* <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                navigate(`/building/entrance?buildingId=${data.data.id}`)
+              }
+            >
+              Entrance
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() =>
+                navigate(`/building/camera?buildingId=${data.data.id}`)
+              }
+            >
+              Camera
+            </Button> */}
+          </Box>
+        </div>
+        <EntranceList buildingId={buildingIdFromParams} />
+        <CameraList buildingId={buildingIdFromParams} />
+      </div>
+    </div>
   );
 }
 export default BuildingDetail;

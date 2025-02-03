@@ -221,7 +221,7 @@ function Entrance() {
                   <IconButton
                     onClick={() => {
                       navigate(
-                        `detail?entranceId=${item.id}&&buildingId=${buildingIdFromParams}`
+                        `detail?entranceId=${item.id}&buildingId=${buildingIdFromParams}`
                       );
                     }}
                     aria-label="view"

@@ -21,6 +21,8 @@ import Operator from "./pages/operator/Operator";
 import OperatorDetail from "./pages/operator/components/DetailOperator";
 import AttachmentUser from "./pages/entrance/components/AttachmentUser";
 import OperatorProfile from "./pages/operatorProfile/OperatorProfile";
+import Test from "./pages/building/Test";
+import UserList from "./pages/user/UserList";
 
 function App() {
   const navigate = useNavigate();
@@ -38,10 +40,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         {/* <Route path="/register" element={<Register />} /> */}
         <Route path="/" element={<Navigate to="/building" />} />
-        <Route path="/building" element={<Building />} />
+        <Route path="/building" element={<Test />} />
         <Route path="/building/add-home" element={<AddBuilding />} />
         <Route path="/building/entrance" element={<Entrance />} />
-        <Route path="/building/entrance/detail" element={<EntranceDetail />} />
+        <Route path="/building/detail/entrance/detail" element={<EntranceDetail />} />
         <Route
           path="/building/entrance/detail/attachment-user"
           element={<AttachmentUser />}
@@ -49,7 +51,7 @@ function App() {
         <Route path="/building/camera" element={<Camera />} />
         <Route path="/building/camera/detail" element={<CameraDetail />} />
         <Route path="/building/detail" element={<BuildingDetail />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/user" element={<UserList />} />
         <Route path="/user/detail" element={<UserDetail />} />
         <Route path="/operator/profile" element={<OperatorProfile />} />
         {user?.user?.role === "SYSTEM_ADMIN" ? (

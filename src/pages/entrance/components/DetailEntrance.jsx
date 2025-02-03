@@ -61,7 +61,7 @@ function EntranceDetail() {
             variant="contained"
             color="inherit"
             onClick={() =>
-              navigate(`/building/entrance?buildingId=${buildingIdFromParams}`)
+              navigate(-1)
             }
           >
             <ArrowBackIcon fontSize="medium" />
