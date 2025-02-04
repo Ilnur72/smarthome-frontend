@@ -31,6 +31,7 @@ function AddUser({
         AttachmentUserIsOpen(false);
       }
     } catch (error) {
+      if (e.response?.status === 401) navigate("/login");
       if (error.response?.data.statusCode === 400) {
         toast.error(
           typeof error.response.data.message == "object"

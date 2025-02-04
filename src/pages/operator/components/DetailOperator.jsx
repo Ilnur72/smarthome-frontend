@@ -43,18 +43,18 @@ function OperatorDetail() {
     );
 
   return (
-    <div>
-      <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
-        <Typography variant="h5" component="h2" sx={{ marginBottom: 2 }}>
-          Operator Detail
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Fullname:</strong>
-          {data.data.name}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>email:</strong> {data.data.email}
-        </Typography>
+    <div className="bg-gray-50">
+      <div className="max-w-7xl mx-auto flex flex-col gap-3">
+        <h2 className="mb-2">Operator Detail</h2>
+
+        <p className="font-normal">
+          <strong className="text-gray-700">Kamera IP manzili:</strong>
+          {data.data?.name}
+        </p>
+        <p className="font-normal">
+          <strong className="text-gray-700">email:</strong>
+          {data.data?.email}
+        </p>
         <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
           <Button
             variant="contained"
@@ -74,8 +74,8 @@ function OperatorDetail() {
             Uy biriktirish
           </Button> */}
         </Box>
-      </Paper>
-      <ListOperatorBuilding data={operatorBuilding.data} refetch={refetch} />
+        <ListOperatorBuilding data={operatorBuilding.data} refetch={refetch} />
+      </div>
     </div>
   );
 }

@@ -45,45 +45,47 @@ function UserDetail() {
     );
 
   return (
-    <div>
-      <AttachmentHomeModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        refetch={refetch}
-        userIdFromParams={userIdFromParams}
-      />
-      <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
-        <Typography variant="h5" component="h2" sx={{ marginBottom: 2 }}>
-          User Detail
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Fullname:</strong>
-          {data.data.fullname}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Phone:</strong> {data.data.phone}
-        </Typography>
-        <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
-          <Button
-            variant="contained"
-            color="inherit"
-            onClick={() => {
-              navigate(`/user`);
-            }}
-          >
-            <ArrowBackIcon fontSize="medium" />
-            Back
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsOpen(true)}
-          >
-            Uy biriktirish
-          </Button>
-        </Box>
-      </Paper>
-      <ListUserApartment data={userApartment.data} refetch={refetch} />
+    <div className="bg-gray-50">
+      <div className="max-w-7xl mx-auto flex flex-col gap-3">
+        <div className="bg-white rounded-lg shadow-sm border-b border-gray-200 p-3">
+          <AttachmentHomeModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            refetch={refetch}
+            userIdFromParams={userIdFromParams}
+          />
+          <h2 className="mb-2">User Detail</h2>
+          <p className="font-normal">
+            <strong className="text-gray-700">Fullname:</strong>
+            {data.data.fullname}
+          </p>
+          <p className="font-normal">
+            <strong className="text-gray-700">Phone:</strong>
+            {data.data.phone}
+          </p>
+
+          <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              <ArrowBackIcon fontSize="medium" />
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsOpen(true)}
+            >
+              Uy biriktirish
+            </Button>
+          </Box>
+        </div>
+        <ListUserApartment data={userApartment.data} refetch={refetch} />
+      </div>
     </div>
   );
 }

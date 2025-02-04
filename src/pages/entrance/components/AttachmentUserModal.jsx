@@ -102,8 +102,6 @@ function AttachmentUser({ setIsOpen, isOpen, apartmentId }) {
                 onClick={() => setIsOpen(false)}
                 type="button"
                 sx={{
-                  color: "#00BDD6FF",
-                  borderColor: "#00BDD6FF",
                   borderRadius: "4px",
                 }}
               >
@@ -113,7 +111,6 @@ function AttachmentUser({ setIsOpen, isOpen, apartmentId }) {
                 type="submit"
                 variant="contained"
                 sx={{
-                  background: "#00BDD6FF",
                   color: "#fff",
                   borderRadius: "4px",
                 }}

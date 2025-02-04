@@ -155,8 +155,6 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
             }}
             type="button"
             sx={{
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >
@@ -167,8 +165,6 @@ function AttachmentHomeModal({ isOpen, setIsOpen, refetch, userIdFromParams }) {
             variant="contained"
             disabled={formState.isSubmitting}
             sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
               borderRadius: "4px",
             }}
           >

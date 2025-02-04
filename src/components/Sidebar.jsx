@@ -10,10 +10,9 @@ import { jwtDecode } from "jwt-decode";
 function Sidebar() {
   const navigate = useNavigate();
   const token = loadState("token");
-  if(!token) return navigate('/login')
-  
-  const { user } = jwtDecode(token);
+  if (!token) return navigate("/login");
 
+  const { user } = jwtDecode(token);
 
   let links = [
     { img: ApartmentIcon, link: "Binolar", url: `/building` },
@@ -23,7 +22,7 @@ function Sidebar() {
   ];
   if (user.role === "SYSTEM_ADMIN")
     links.push({ img: Building2, link: "Shirkat", url: `/operator` });
-  else  links.unshift ({ img: User, link: "Porfile", url: `/operator/profile` });
+  else links.unshift({ img: User, link: "Porfile", url: `/operator/profile` });
   // else links.push({img})
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -50,7 +49,7 @@ function Sidebar() {
             <NavLink key={index} to={item.url}>
               {({ isActive }) => (
                 <li
-                  className={`flex items-center p-2 hover:bg-gray-100 rounded ${
+                  className={`flex items-center p-2 hover:bg-gray-200 rounded ${
                     isActive && "bg-primary-150"
                   }`}
                 >
@@ -61,7 +60,7 @@ function Sidebar() {
             </NavLink>
           ))}
           <li
-            className="flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer"
+            className="flex items-center p-2 hover:bg-gray-200 rounded cursor-pointer"
             onClick={handleLogout}
           >
             <LogOutIcon />

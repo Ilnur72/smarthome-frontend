@@ -12,15 +12,23 @@ function BuildingDetail() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(window.location.search);
   const buildingIdFromParams = queryParams.get("buildingId");
+  const [attachemntCount, setAttachemntCount] = React.useState({
+    attachemntCount: 0,
+    noAttachemntCount: 0,
+  });
 
   const { data, error, isLoading, refetch } = useQuery(
     ["building-detail", buildingIdFromParams],
     () =>
-      axios.get(`/building/${buildingIdFromParams}`).then((res) => res.data),
+      axios
+        .get(`/building/${buildingIdFromParams}`)
+        .then((res) => res.data)
+        .catch((e) => {
+          console.log(e.response);
+          if (e.response?.status === 401) navigate("/login");
+        }),
     {
       enabled: !!buildingIdFromParams,
-      //   cacheTime: 0,
-      //   staleTime: 0,
     }
   );
   if (isLoading)
@@ -29,8 +37,6 @@ function BuildingDetail() {
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
-    console.log(data);
-    
   const address = data?.data.address;
   return (
     <div className="bg-gray-50">
@@ -66,24 +72,6 @@ function BuildingDetail() {
               <ArrowBackIcon fontSize="medium" />
               Back
             </Button>
-            {/* <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                navigate(`/building/entrance?buildingId=${data.data.id}`)
-              }
-            >
-              Entrance
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() =>
-                navigate(`/building/camera?buildingId=${data.data.id}`)
-              }
-            >
-              Camera
-            </Button> */}
           </Box>
         </div>
         <EntranceList buildingId={buildingIdFromParams} />

@@ -47,6 +47,10 @@ function Entrance() {
         `/entrance?filters[building_id]=${buildingIdFromParams}&sort[by]=created_at&sort[order]=DESC`
       )
       .then((res) => res.data)
+      .catch((e) => {
+        console.log(e.response);
+        if (e.response?.status === 401) navigate("/login");
+      })
   );
   if (isLoading)
     return (

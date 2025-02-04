@@ -16,30 +16,36 @@ import { saveState } from "../../Utils/storage";
 import Visibility from "../../assets/visibility.svg";
 import VisibilityOff from "../../assets/visibilityOff.svg";
 import { jwtDecode } from "jwt-decode";
+import { useQueryClient } from "react-query";
 
 const Login = ({ refetchData }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const queryClient = useQueryClient();
 
   const { register, handleSubmit, reset, formState } = useForm();
 
   const submit = async (dataValue) => {
     try {
       const { data } = await axios.post("/auth/login-staff", dataValue);
-        const { user } = jwtDecode(data.data.token);
-      
+      const { user } = jwtDecode(data.data.token);
+
+      queryClient.clear();
+      queryClient.invalidateQueries();
+
       saveState("token", data.data.token);
       if (data.data.token) {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.data.token}`;
-        navigate(user.role ==='OPERATOR' ? '/operator/profile' : "/building");
+
+        navigate(user.role === "OPERATOR" ? "/operator/profile" : "/building");
         toast.success("Siz tizimga muvaffaqiyatli kirdingiz.");
         reset();
         refetchData();
       }
-    } catch (error) {            
+    } catch (error) {
       toast.error(error.response?.data.message);
     }
   };

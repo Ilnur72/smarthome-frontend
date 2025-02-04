@@ -1,36 +1,23 @@
-import React from "react";
-import {
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Pagination,
-  Paper,
-  Select,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import iconDelete from "../../assets/ActionIcon/delete.svg";
-import iconEdit from "../../assets/ActionIcon/edit.svg";
-import iconView from "../../assets/ActionIcon/view.svg";
-import { Commet } from "react-loading-indicators";
-import axios from "axios";
+import React, { useState } from "react";
+import { Eye, Edit2, Trash2, Search, Plus } from "lucide-react";
 import { useQuery } from "react-query";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import EditBuilding from "./components/EditBuilding";
+import { Commet } from "react-loading-indicators";
 import { loadState } from "../../Utils/storage";
 import { jwtDecode } from "jwt-decode";
+import { Pagination } from "../../components/Pagination";
+import EditBuilding from "./components/EditBuilding";
 
 function Building() {
-  const [page, setPage] = React.useState(1);
-  const [row, setRow] = React.useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All Status");
+  const [sortBy, setSortBy] = useState("#");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const navigate = useNavigate();
-  const [showBuilding, setShowBuilding] = React.useState({ isOpen: false });
+  const [showBuilding, setShowBuilding] = useState({ isOpen: false });
 
   const token = loadState("token");
   const { user } = jwtDecode(token);
@@ -48,18 +35,21 @@ function Building() {
     });
   }
 
+  // Fetch building data from the API
   const { data, isLoading, refetch } = useQuery(
     "building",
-
     () =>
       axios
         .get(
-          `/building?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC${
+          `/building?page[offset]=${currentPage}&page[limit]=${itemsPerPage}&sort[by]=created_at&sort[order]=DESC${
             user.role === "OPERATOR" ? "&filters[operator_id]=" + user.id : ""
           }`
         )
         .then((res) => res.data)
-        .catch((e) => console.log(e)),
+        .catch((e) => {
+          console.log(e.response);
+          if (e.response?.status === 401) navigate("/login");
+        }),
     {
       staleTime: 1000 * 60 * 5,
       cacheTime: 1000 * 60 * 10,
@@ -70,8 +60,9 @@ function Building() {
 
   React.useEffect(() => {
     refetch();
-    if (data?.data.buildings.length === 0 && page !== 1) setPage(page - 1);
-  }, [page, row, refetch]);
+    if (data?.data.buildings.length === 0 && currentPage !== 1)
+      setCurrentPage(currentPage - 1);
+  }, [currentPage, itemsPerPage, refetch]);
 
   if (isLoading)
     return (
@@ -79,370 +70,167 @@ function Building() {
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
-  return (
-    <div>
-      <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
-        <h2 className="text-xl font-bold">Uylar</h2>
-        <div className="flex items-center">
-          {user.role === "SYSTEM_ADMIN" ? (
-            <button
-              onClick={() => {
-                setShowBuilding({ isOpen: true });
-                navigate("add-home");
-              }}
-              className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
-            >
-              Uy qo'shish
-            </button>
-          ) : null}
-        </div>
-      </div>
-      <div className="flex items-center justify-between pt-4 pl-4">
-        <strong className="font-bold text-base text-primary">
-          Total: {data?.data.total}
-        </strong>
-        <div className="flex items-center pb-2"></div>
-      </div>
 
-      <EditBuilding
-        showBuilding={showBuilding}
-        setShowBuilding={setShowBuilding}
-        refetch={refetch}
-      />
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="left"
-              >
-                Bino raqami
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="center"
-              >
-                Viloyat
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="center"
-              >
-                Tuman
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="center"
-              >
-                Qavatlar soni
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="center"
-              >
-                Padezlar soni
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="center"
-              >
-                Xonadonlar soni
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="center"
-              >
-                Uy manzili
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: "#092C4C",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                align="center"
-              >
-                action
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data?.data.buildings?.map((item, index) => (
-              <TableRow
-                key={item.id}
-                sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                }}
-              >
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 150,
-                  }}
-                  align="center"
+  const filteredBuildings = data?.data.buildings.filter((building) => {
+    const matchesSearch =
+      building.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      building.address.street.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
+  });
+
+  return (
+    <div className="min-h-screen bg-gray-50 ">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-white rounded-lg shadow-sm">
+          {/* Header */}
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search buildings..."
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-[300px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="flex items-center gap-4">
+                {/* <select
+                  className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
                 >
-                  {item.name}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 170,
-                  }}
-                  align="center"
+                  <option>All Status</option>
+                  <option>Verified</option>
+                  <option>Rejected</option>
+                  <option>Pending</option>
+                </select> */}
+                <select
+                  className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
                 >
-                  {item.address.region}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 170,
+                  <option value="#">Sort by (#)</option>
+                  <option value="name">Name</option>
+                  <option value="age">Age</option>
+                  <option value="country">Country</option>
+                </select>
+                <button
+                  onClick={() => {
+                    setShowBuilding({ isOpen: true });
+                    navigate("add-home");
                   }}
-                  align="center"
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                 >
-                  {item.address.district}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 170,
-                  }}
-                  align="center"
-                >
-                  {item.floor}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 170,
-                  }}
-                  align="center"
-                >
-                  {item.entrance_count}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 170,
-                  }}
-                  align="center"
-                >
-                  {item.apartments_count}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 170,
-                  }}
-                  align="center"
-                >
-                  {item.address.street}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: 170,
-                  }}
-                  align="center"
-                >
-                  <IconButton
-                    onClick={() => {
-                      navigate(`/building/detail?buildingId=${item.id}`);
-                    }}
-                    aria-label="view"
-                    size="medium"
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
-                        },
-                      },
-                    }}
-                  >
-                    <img src={iconView} alt="" />
-                  </IconButton>
-                  {user.role === "SYSTEM_ADMIN" ? (
-                    <IconButton
-                      onClick={() => {
-                        showData(item.id);
-                      }}
-                      aria-label="edit"
-                      size="medium"
-                      sx={{
-                        mx: 1,
-                        width: "35px",
-                        height: "35px",
-                        border: "1px solid #EAEEF4",
-                        "&:hover": {
-                          backgroundColor: "#00BDD6FF",
-                          "& > img": {
-                            filter: "brightness(2000%)",
-                          },
-                        },
-                      }}
-                    >
-                      <img src={iconEdit} alt="" />
-                    </IconButton>
-                  ) : null}
-                  {user.role === "SYSTEM_ADMIN" ? (
-                    <IconButton
-                      sx={{
-                        width: "35px",
-                        height: "35px",
-                        border: "1px solid #EAEEF4",
-                        "&:hover": {
-                          backgroundColor: "#00BDD6FF",
-                          "& > img": {
-                            filter: "brightness(2000%)",
-                          },
-                        },
-                      }}
-                      onClick={async () => {
-                        await axios.delete(`/building/${item.id}`);
-                        refetch();
-                      }}
-                      aria-label="delete"
-                      size="medium"
-                    >
-                      <img src={iconDelete} alt="" />
-                    </IconButton>
-                  ) : null}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div align="center" className="flex justify-center items-center py-2">
-        <Stack spacing={2}>
-          <Pagination
-            onChange={(_, page) => setPage(page)}
-            count={data?.data && Math.ceil(data.data?.total / row)}
-            variant="outlined"
-            shape="rounded"
-            page={page}
+                  <Plus className="w-5 h-5" />
+                  Add Building
+                </button>
+                {/* <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <Download className="w-5 h-5 text-gray-600" />
+                </button> */}
+              </div>
+            </div>
+          </div>
+          <EditBuilding
+            showBuilding={showBuilding}
+            setShowBuilding={setShowBuilding}
+            refetch={refetch}
           />
-        </Stack>
-        <FormControl sx={{ width: "80px" }}>
-          <InputLabel size="small" id="demo-simple-select-label">
-            Row
-          </InputLabel>
-          <Select
-            size="small"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={row}
-            label="Row"
-            onChange={(e) => setRow(e.target.value)}
-          >
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={10}>10</MenuItem>
-          </Select>
-        </FormControl>
+          {/* Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Building Name
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Region
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    District
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Floors
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Apartments
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Address
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {filteredBuildings?.map((building) => (
+                  <tr key={building.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-3 text-center">{building.name}</td>
+                    <td className="px-6 py-3 text-center">
+                      {building.address.region}
+                    </td>
+                    <td className="px-6 py-3 text-center">
+                      {building.address.district}
+                    </td>
+                    <td className="px-6 py-3 text-center">{building.floor}</td>
+                    <td className="px-6 py-3 text-center">
+                      {building.apartments_count}
+                    </td>
+                    <td className="px-6 py-3 text-center">
+                      {building.address.street}
+                    </td>
+                    <td className="px-6 py-3 text-center">
+                      <div className="flex justify-center gap-3">
+                        <button
+                          onClick={() => {
+                            navigate(
+                              `/building/detail?buildingId=${building.id}`
+                            );
+                          }}
+                          className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                        >
+                          <Eye className="w-4 h-4 text-gray-500" />
+                        </button>
+                        {user.role === "SYSTEM_ADMIN" ? (
+                          <button
+                            onClick={() => {
+                              showData(building.id);
+                            }}
+                            className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                          >
+                            <Edit2 className="w-4 h-4 text-gray-500" />
+                          </button>
+                        ) : null}
+                        {user.role === "SYSTEM_ADMIN" ? (
+                          <button
+                            onClick={async () => {
+                              await axios.delete(`/building/${building.id}`);
+                              refetch();
+                            }}
+                            className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4 text-gray-500" />
+                          </button>
+                        ) : null}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination Component */}
+          <Pagination
+            totalItems={data.data?.total}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+          />
+        </div>
       </div>
     </div>
   );

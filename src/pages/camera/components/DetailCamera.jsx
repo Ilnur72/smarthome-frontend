@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Paper, Typography, Box } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Commet } from "react-loading-indicators";
@@ -15,7 +15,14 @@ function CameraDetail() {
 
   const { data, error, isLoading, refetch } = useQuery(
     "camera-detail",
-    () => axios.get(`/camera/${cameraIdFromParams}`).then((res) => res.data)
+    () =>
+      axios
+        .get(`/camera/${cameraIdFromParams}`)
+        .then((res) => res.data)
+        .catch((e) => {
+          console.log(e.response);
+          if (e.response?.status === 401) navigate("/login");
+        })
     // {
     //   cacheTime: 0,
     //   staleTime: 0,
@@ -28,41 +35,35 @@ function CameraDetail() {
       </div>
     );
 
-    return (
-    <div>
-      <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
-        <Typography variant="h5" component="h2" sx={{ marginBottom: 2 }}>
-          Camera Detail
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Kamera IP manzili:</strong> {data.data.ip_address}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Login:</strong> {data.data.login}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Password:</strong> {data.data.password}
-        </Typography>
-        <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
-          {/* <button
-        type="button"
-        onClick={() => navigate("/camera")}
-        className="bg-inherit px-2 py-2 rounded mr-2 text-3xl"
-      >
-      </button> */}
-          <Button
-            variant="contained"
-            color="inherit"
-            onClick={() =>
-              navigate(`/building/camera?buildingId=${buildingIdFromParams}`)
-            }
-          >
-            <ArrowBackIcon fontSize="medium" />
-            Back
-          </Button>
-        </Box>
-      </Paper>
-      <ListEntrance data={data.data} />
+  return (
+    <div className="bg-gray-50">
+      <div className="max-w-7xl mx-auto flex flex-col gap-3">
+        <div className="bg-white rounded-lg shadow-sm border-b border-gray-200 p-3">
+          <p className="font-normal">
+            <strong className="text-gray-700">Kamera IP manzili:</strong>
+            {data.data.ip_address}
+          </p>
+          <p className="font-normal">
+            <strong className="text-gray-700">Login:</strong>
+            {data.data.login}
+          </p>
+          <p className="font-normal">
+            <strong className="text-gray-700">Password:</strong>{" "}
+            {data.data.password}
+          </p>
+          <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowBackIcon fontSize="medium" />
+              Back
+            </Button>
+          </Box>
+        </div>
+        <ListEntrance data={data.data} />
+      </div>
     </div>
   );
 }

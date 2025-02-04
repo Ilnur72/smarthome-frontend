@@ -23,6 +23,10 @@ function EditCamera({ refetch, buildingId, setShowCamera, showCamera }) {
     axios
       .get(`/entrance?filters[building_id]=${buildingId}`)
       .then((res) => res.data)
+      .catch((e) => {
+        console.log(e.response);
+        if (e.response?.status === 401) navigate("/login");
+      })
   );
 
   const handleEntranceToggle = (entrance) => {
@@ -68,7 +72,7 @@ function EditCamera({ refetch, buildingId, setShowCamera, showCamera }) {
             <input
               type="text"
               {...register("ip_address", { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
               placeholder="IP"
               defaultValue={camera.ip_address}
             />
@@ -80,7 +84,7 @@ function EditCamera({ refetch, buildingId, setShowCamera, showCamera }) {
             <input
               type="text"
               {...register("login", { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
               placeholder="Login"
               defaultValue={camera.login}
             />
@@ -93,7 +97,7 @@ function EditCamera({ refetch, buildingId, setShowCamera, showCamera }) {
           <input
             type="password"
             {...register("password", { required: true })}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
             placeholder="Password"
             defaultValue={camera.password}
           />

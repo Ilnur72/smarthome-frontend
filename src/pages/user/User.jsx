@@ -1,23 +1,4 @@
-import React from "react";
-import {
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Pagination,
-  Paper,
-  Select,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import iconDelete from "../../assets/ActionIcon/delete.svg";
-import iconEdit from "../../assets/ActionIcon/edit.svg";
-import iconView from "../../assets/ActionIcon/view.svg";
+import React, { useState } from "react";
 import { Commet } from "react-loading-indicators";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -26,17 +7,25 @@ import AddUser from "./components/AddUser";
 import EditUser from "./components/EditUser";
 import { loadState } from "../../Utils/storage";
 import { jwtDecode } from "jwt-decode";
-// import EditUser from "./components/EditUser";
+import { Button } from "@mui/material";
+import { Edit2, Eye, Plus, Search, Trash2 } from "lucide-react";
+import { Pagination } from "../../components/Pagination";
 
 function User() {
-  const [page, setPage] = React.useState(1);
-  const [row, setRow] = React.useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("#");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  // const [page, setCurrentPage] = React.useState(1);
+  // const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const navigate = useNavigate();
   const [showUser, setShowUser] = React.useState({ isOpen: false });
   const [isOpen, setIsOpen] = React.useState(false);
+  console.log(currentPage, itemsPerPage);
 
   const token = loadState("token");
   const { user } = jwtDecode(token);
+  console.log(user.role);
 
   async function showData(id) {
     const { data } = await axios.get(`/user/${id}`);
@@ -45,12 +34,11 @@ function User() {
   }
 
   const { data, isLoading, refetch } = useQuery(
-    "user",
-
+    ["user", searchTerm, currentPage, itemsPerPage],
     () =>
       axios
         .get(
-          `/user?page[offset]=${page}&page[limit]=${row}&sort[by]=created_at&sort[order]=DESC${
+          `/user?page[offset]=${currentPage}&page[limit]=${itemsPerPage}&sort[by]=created_at&sort[order]=DESC&search=${searchTerm}&${
             user.role === "OPERATOR" ? "&filters[staff_id]=" + user.id : ""
           }`
         )
@@ -63,11 +51,13 @@ function User() {
       refetchOnWindowFocus: false,
     }
   );
+  console.log(data);
 
   React.useEffect(() => {
     refetch();
-    if (data?.data.data.length === 0 && page !== 1) setPage(page - 1);
-  }, [page, row, refetch]);
+    if (data?.data.data.length === 0 && currentPage !== 1)
+      setCurrentPage(currentPage - 1);
+  }, [currentPage, itemsPerPage, refetch]);
 
   if (isLoading)
     return (
@@ -76,228 +66,147 @@ function User() {
       </div>
     );
   return (
-    <div>
-      <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
-        <h2 className="text-xl font-bold">Users</h2>
-        <div className="flex items-center">
-          <button
-            onClick={() => {
-              setIsOpen(true);
-            }}
-            className={`bg-primary-500 text-white px-4 py-2 rounded ml-2`}
-          >
-            Foydalanuvchi qo'shish
-          </button>
-        </div>
-      </div>
-      <div className="flex items-center justify-between pt-4 pl-4">
-        <strong className="font-bold text-base text-primary">
-          Total: {data?.data.total}
-        </strong>
-        <div className="flex items-center pb-2"></div>
-      </div>
-
-      <EditUser
-        showUser={showUser}
-        setShowUser={setShowUser}
-        refetch={refetch}
-      />
-      <AddUser refetch={refetch} setIsOpen={setIsOpen} isOpen={isOpen} />
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-                align="center"
-              >
-                To'liq ism
-              </TableCell>
-              <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-                align="center"
-              >
-                Xonadon raqami
-              </TableCell>
-              <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-                align="center"
-              >
-                Bino raqami
-              </TableCell>
-              <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-                align="center"
-              >
-                Tel raqami
-              </TableCell>
-              <TableCell
-                sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-                align="center"
-              >
-                action
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data?.data.data?.map((item, index) => (
-              <TableRow
-                key={item.id}
-                sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                }}
-              >
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
+    <div className="min-h-screen bg-gray-50 ">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-white rounded-lg shadow-sm">
+          {/* Header */}
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search buildings..."
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-[300px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="flex items-center gap-4">
+                {/* <select
+                  className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
                 >
-                  {item.fullname}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
+                  <option>All Status</option>
+                  <option>Verified</option>
+                  <option>Rejected</option>
+                  <option>Pending</option>
+                </select> */}
+                {/* <select
+                  className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
                 >
-                  {item.userApartments?.length
-                    ? item.userApartments[0]?.apartment?.number
-                    : "Xonadon hali mavjud emas"}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
+                  <option value="#">Sort by (#)</option>
+                  <option value="name">Name</option>
+                  <option value="age">Age</option>
+                  <option value="country">Country</option>
+                </select> */}
+                <button
+                  onClick={() => {
+                    setIsOpen(true);
                   }}
-                  align="center"
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                 >
-                  {item.userApartments?.length
-                    ? item.userApartments[0]?.apartment?.entrance.buildings.name
-                    : "Xonadon hali mavjud emas"}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
-                >
-                  {item.phone}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: "#092C4C",
-                    paddingY: 0.8,
-                  }}
-                  align="center"
-                >
-                  <IconButton
-                    onClick={() => {
-                      navigate(`/user/detail?userId=${item.id}`);
-                    }}
-                    aria-label="view"
-                    size="medium"
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
-                        },
-                      },
-                    }}
-                  >
-                    <img src={iconView} alt="" />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      showData(item.id);
-                    }}
-                    aria-label="edit"
-                    size="medium"
-                    sx={{
-                      mx: 1,
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
-                        },
-                      },
-                    }}
-                  >
-                    <img src={iconEdit} alt="" />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      width: "35px",
-                      height: "35px",
-                      border: "1px solid #EAEEF4",
-                      "&:hover": {
-                        backgroundColor: "#00BDD6FF",
-                        "& > img": {
-                          filter: "brightness(2000%)",
-                        },
-                      },
-                    }}
-                    onClick={async () => {
-                      await axios.delete(`/user/${item.id}`);
-                      refetch();
-                    }}
-                    aria-label="delete"
-                    size="medium"
-                  >
-                    <img src={iconDelete} alt="" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div align="center" className="flex justify-center items-center py-2">
-        <Stack spacing={2}>
-          <Pagination
-            onChange={(_, page) => setPage(page)}
-            count={data?.data && Math.ceil(data.data?.total / row)}
-            variant="outlined"
-            shape="rounded"
-            page={page}
+                  <Plus className="w-5 h-5" />
+                  Add User
+                </button>
+                {/* <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <Download className="w-5 h-5 text-gray-600" />
+                </button> */}
+              </div>
+            </div>
+          </div>
+          <EditUser
+            showUser={showUser}
+            setShowUser={setShowUser}
+            refetch={refetch}
           />
-        </Stack>
-        <FormControl sx={{ width: "80px" }}>
-          <InputLabel size="small" id="demo-simple-select-label">
-            Row
-          </InputLabel>
-          <Select
-            size="small"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={row}
-            label="Row"
-            onChange={(e) => setRow(e.target.value)}
-          >
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={10}>10</MenuItem>
-          </Select>
-        </FormControl>
+          <AddUser refetch={refetch} setIsOpen={setIsOpen} isOpen={isOpen} />
+          <div className="overflow-x-auto ">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    To'liq ism
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Xonadon raqami
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Bino raqami
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Tel raqami
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {data?.data?.data?.map((item) => (
+                  <tr key={item.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-3 text-center">{item.fullname}</td>
+                    <td className="px-6 py-3 text-center">
+                      {item.userApartments?.length
+                        ? item.userApartments[0]?.apartment?.number
+                        : "Xonadon hali mavjud emas"}
+                    </td>
+                    <td className="px-6 py-3 text-center">
+                      {item.userApartments?.length
+                        ? item.userApartments[0]?.apartment?.entrance.buildings
+                            .name
+                        : "Xonadon hali mavjud emas"}
+                    </td>
+                    <td className="px-6 py-3 text-center">{item.phone}</td>
+                    <td className="px-6 py-3 text-center">
+                      <div className="flex justify-center gap-3">
+                        <button className="p-1 hover:bg-gray-200 rounded-lg transition-colors">
+                          <Eye
+                            onClick={() => {
+                              navigate(`/user/detail?userId=${item.id}`);
+                            }}
+                            className="w-4 h-4 text-gray-500"
+                          />
+                        </button>
+                        {user.role === "SYSTEM_ADMIN" ? (
+                          <button
+                            onClick={() => {
+                              showData(item.id);
+                            }}
+                            className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                          >
+                            <Edit2 className="w-4 h-4 text-gray-500" />
+                          </button>
+                        ) : null}
+                        {user.role === "SYSTEM_ADMIN" ? (
+                          <button
+                            onClick={async () => {
+                              await axios.delete(`/user/${item.id}`);
+                              refetch();
+                            }}
+                            className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4 text-gray-500" />
+                          </button>
+                        ) : null}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination
+            totalItems={data.data?.total}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+          />
+        </div>
       </div>
     </div>
   );

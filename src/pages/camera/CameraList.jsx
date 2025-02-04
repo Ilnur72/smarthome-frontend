@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { loadState } from "../../Utils/storage";
 import { jwtDecode } from "jwt-decode";
 import { Button } from "@mui/material";
+import AddCamera from "./components/AddCamera";
+import EditCamera from "./components/EditCamera";
 
 function CameraList({ buildingId }) {
   const navigate = useNavigate();
@@ -18,10 +20,12 @@ function CameraList({ buildingId }) {
 
   const { data, isLoading, refetch } = useQuery("camera", () =>
     axios
-      .get(
-        `/camera?filters[building_id]=${buildingId}`
-      )
+      .get(`/camera?filters[building_id]=${buildingId}`)
       .then((res) => res.data)
+      .catch((e) => {
+        console.log(e.response);
+        if (e.response?.status === 401) navigate("/login");
+      })
   );
 
   async function showData(id) {
@@ -38,7 +42,7 @@ function CameraList({ buildingId }) {
         </h2>
         {user.role === "SYSTEM_ADMIN" ? (
           <Button
-          variant="contained"
+            variant="contained"
             onClick={() => {
               setIsOpen(true);
             }}
@@ -48,17 +52,34 @@ function CameraList({ buildingId }) {
           </Button>
         ) : null}
       </div>
+      {isOpen ? (
+        <AddCamera
+          refetch={refetch}
+          buildingId={buildingId}
+          setIsOpen={setIsOpen}
+          isOpen={isOpen}
+          showCamera={showCamera}
+        />
+      ) : null}
+      {showCamera.isOpen ? (
+        <EditCamera
+          refetch={refetch}
+          buildingId={buildingId}
+          setShowCamera={setShowCamera}
+          showCamera={showCamera}
+        />
+      ) : null}
       <table className="w-full">
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
-              Login
+              IP address
             </th>
             <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
               Password
             </th>
             <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
-              IP address
+              Login
             </th>
             <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
               Action
@@ -66,17 +87,19 @@ function CameraList({ buildingId }) {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {data?.data?.camera?.map((camera) => (
+          {data?.data?.data?.map((camera) => (
             <tr key={camera.id} className="hover:bg-gray-50">
+              <td className="px-6 py-4 text-center">{camera.ip_address}</td>
               <td className="px-6 py-4 text-center">{camera.login}</td>
               <td className="px-6 py-4 text-center">{camera.password}</td>
-              <td className="px-6 py-4 text-center">{camera.ip_address}</td>
               <td className="px-6 py-4 text-center">
                 <div className="flex justify-center gap-3">
-                  <button className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                  <button className="p-1 hover:bg-gray-200 rounded-lg transition-colors">
                     <Eye
                       onClick={() => {
-                        navigate(`/camera/detail?buildingId=${camera.id}`);
+                        navigate(
+                          `/building/camera/detail?cameraId=${camera.id}&&buildingId=${buildingId}`
+                        );
                       }}
                       className="w-4 h-4 text-gray-500"
                     />
@@ -86,7 +109,7 @@ function CameraList({ buildingId }) {
                       onClick={() => {
                         showData(camera.id);
                       }}
-                      className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
                     >
                       <Edit2 className="w-4 h-4 text-gray-500" />
                     </button>
@@ -97,7 +120,7 @@ function CameraList({ buildingId }) {
                         await axios.delete(`/camera/${camera.id}`);
                         refetch();
                       }}
-                      className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
                     >
                       <Trash2 className="w-4 h-4 text-gray-500" />
                     </button>

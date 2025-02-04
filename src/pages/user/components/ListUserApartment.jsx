@@ -1,16 +1,7 @@
-import {
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
 import React, { useState } from "react";
 import iconDelete from "../../../assets/ActionIcon/delete.svg";
 import axios from "axios";
+import { Trash2 } from "lucide-react";
 
 function ListUserApartment({ data, refetch }) {
   const [loadingId, setLoadingId] = useState(null);
@@ -28,111 +19,54 @@ function ListUserApartment({ data, refetch }) {
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650, padding: 5 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell
-              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-              align="center"
-            >
-              Bino raqami
-            </TableCell>
-            <TableCell
-              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-              align="center"
-            >
-              Podyezd raqami
-            </TableCell>
-            <TableCell
-              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-              align="center"
-            >
-              Uy raqami raqami
-            </TableCell>
-            <TableCell
-              sx={{ fontSize: 16, fontWeight: 800, color: "#092C4C" }}
-              align="center"
-            >
-              Action
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.data?.map((item) => (
-            <TableRow
-              key={item.id}
-              sx={{
-                "&:last-child td, &:last-child th": { border: 0 },
-              }}
-            >
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "#092C4C",
-                  paddingY: 0.8,
-                }}
-                align="center"
-              >
-                {item.apartment?.entrance?.buildings?.name}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "#092C4C",
-                  paddingY: 0.8,
-                }}
-                align="center"
-              >
-                {item.apartment.entrance.name}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "#092C4C",
-                  paddingY: 0.8,
-                }}
-                align="center"
-              >
-                {item.apartment.number}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "#092C4C",
-                  paddingY: 0.8,
-                }}
-                align="center"
-              >
-                <IconButton
-                  sx={{
-                    width: "35px",
-                    height: "35px",
-                    border: "1px solid #EAEEF4",
-                    "&:hover": {
-                      backgroundColor: "#00BDD6FF",
-                      "& > img": {
-                        filter: "brightness(2000%)",
-                      },
-                    },
-                  }}
-                  onClick={() => handleDelete(item.id)}
-                  aria-label="delete"
-                  size="medium"
-                  disabled={loadingId === item.id}
-                >
-                  <img src={iconDelete} alt="" />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className="overflow-x-auto border rounded-lg">
+      <div className="flex justify-between items-center p-4">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                Bino raqami
+              </th>
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                Podyezd raqami
+              </th>
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                Uy raqami raqami
+              </th>
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {data?.data?.map((item) => (
+              <tr key={item.id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 text-center">
+                  {item.apartment?.entrance?.buildings?.name}
+                </td>
+                <td className="px-6 py-4 text-center">
+                  {item.apartment.entrance.name}
+                </td>
+                <td className="px-6 py-4 text-center">
+                  {item.apartment.number}
+                </td>
+
+                <td className="px-6 py-4 text-center">
+                  <div className="flex justify-center gap-3">
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4 text-gray-500" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 

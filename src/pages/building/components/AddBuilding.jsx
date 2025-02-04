@@ -42,11 +42,24 @@ function AddBuilding() {
   const dispatch = useDispatch();
 
   const { data, isLoading } = useQuery("region", () =>
-    axios.get("/region").then((res) => res.data)
+    axios
+      .get("/region")
+      .then((res) => res.data)
+      .catch((e) => {
+        console.log(e.response);
+        if (e.response?.status === 401) navigate("/login");
+      })
   );
   const { data: operatorData, isLoading: operatorLoading } = useQuery(
     "operator",
-    () => axios.get("/operator").then((res) => res.data)
+    () =>
+      axios
+        .get("/operator")
+        .then((res) => res.data)
+        .catch((e) => {
+          console.log(e.response);
+          if (e.response?.status === 401) navigate("/login");
+        })
   );
 
   const fetchDistricts = async (id) => {
@@ -89,7 +102,7 @@ function AddBuilding() {
     if (result.data.success) {
       dispatch(setBuildingId(result.data.data.id));
       queryClient.invalidateQueries("building");
-      navigate(`/building/entrance?buildingId=${result.data.data.id}`);
+      navigate(`/building/detail?buildingId=${result.data.data.id}`);
     }
   };
 
@@ -123,7 +136,7 @@ function AddBuilding() {
                 {...register("region_id")}
                 required={true}
                 onChange={(e) => fetchDistricts(e.target.value)}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
                 defaultValue=""
               >
                 <option value="" disabled>
@@ -142,7 +155,7 @@ function AddBuilding() {
               <select
                 {...register("district_id")}
                 required={true}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
                 defaultValue=""
               >
                 <option value="" disabled>
@@ -187,7 +200,7 @@ function AddBuilding() {
                 placeholder="Amir Temur shox ko'chasi 14a"
                 {...register("address")}
                 required={true}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -197,7 +210,7 @@ function AddBuilding() {
                 placeholder="14a"
                 {...register("name")}
                 required={true}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
@@ -210,7 +223,7 @@ function AddBuilding() {
                 required={true}
                 max={20}
                 min={2}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
@@ -222,7 +235,7 @@ function AddBuilding() {
                 {...register("entrance_count")}
                 required={true}
                 min={1}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
@@ -234,7 +247,7 @@ function AddBuilding() {
                 {...register("apartments_count")}
                 required={true}
                 min={1}
-                className={`border p-2 rounded w-full ${
+                className={`border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500 ${
                   formState.errors.apartments_count ? "border-red-500" : ""
                 }`}
               />

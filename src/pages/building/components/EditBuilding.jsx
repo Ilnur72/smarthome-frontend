@@ -42,12 +42,25 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
   });
 
   const { data } = useQuery("region", () =>
-    axios.get("/region").then((res) => res.data)
+    axios
+      .get("/region")
+      .then((res) => res.data)
+      .catch((e) => {
+        console.log(e.response);
+        if (e.response?.status === 401) navigate("/login");
+      })
   );
 
   const { data: operatorData, isLoading: operatorLoading } = useQuery(
     "operator",
-    () => axios.get("/operator").then((res) => res.data)
+    () =>
+      axios
+        .get("/operator")
+        .then((res) => res.data)
+        .catch((e) => {
+          console.log(e.response);
+          if (e.response?.status === 401) navigate("/login");
+        })
   );
 
   useEffect(() => {
@@ -150,7 +163,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               {...register("region_id")}
               required
               onChange={(e) => fetchDistricts(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
               defaultValue={showBuilding.data.address.regionId || ""}
             >
               <option value="" disabled>
@@ -169,7 +182,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
             <select
               {...register("district_id")}
               required
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
               defaultValue={showBuilding.data?.address?.districtId || ""}
             >
               <option value="" disabled>
@@ -191,7 +204,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               {...register("address")}
               defaultValue={showBuilding.data.address.street}
               required
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
             />
           </div>
 
@@ -205,7 +218,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               max={20}
               min={2}
               defaultValue={showBuilding.data.floor}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
             />
           </div>
 
@@ -218,7 +231,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               required
               min={1}
               defaultValue={showBuilding.data.entrance_count}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
             />
           </div>
 
@@ -231,7 +244,7 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
               required
               min={1}
               defaultValue={showBuilding.data.apartments_count}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
             />
           </div>
         </div>
@@ -262,8 +275,6 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
             onClick={() => setShowBuilding({ isOpen: false })}
             type="button"
             sx={{
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >
@@ -273,8 +284,6 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
             type="submit"
             variant="contained"
             sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
               borderRadius: "4px",
             }}
             disabled={loading}

@@ -36,7 +36,7 @@ function EditUser({ showUser, setShowUser, refetch }) {
             placeholder="padyez nomi"
             {...register("fullname")}
             required={true}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue={showUser.data.fullname}
           />
         </div>
@@ -48,7 +48,7 @@ function EditUser({ showUser, setShowUser, refetch }) {
             {...register("phone")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue={showUser.data.phone}
           />
         </div>
@@ -59,8 +59,6 @@ function EditUser({ showUser, setShowUser, refetch }) {
             onClick={() => setShowUser({ isOpen: false })}
             type="button"
             sx={{
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >
@@ -70,8 +68,6 @@ function EditUser({ showUser, setShowUser, refetch }) {
             type="submit"
             variant="contained"
             sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
               borderRadius: "4px",
             }}
             disabled={loading}

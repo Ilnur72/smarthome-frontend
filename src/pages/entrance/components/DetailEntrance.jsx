@@ -15,7 +15,6 @@ function EntranceDetail() {
   const buildingIdFromParams = queryParams.get("buildingId");
 
   const [isOpen, setIsOpen] = React.useState(false);
-  
 
   const { data, error, isLoading, refetch } = useQuery(
     "entrance-detail",
@@ -32,51 +31,50 @@ function EntranceDetail() {
     );
 
   return (
-    <div>
-
-      <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
-        <Typography variant="h5" component="h2" sx={{ marginBottom: 2 }}>
-          Entrance Detail
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Kamera IP manzili:</strong> {data.data.name}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>uy raqamlari:</strong>{" "}
+    <div className="bg-gray-50">
+      <div className="max-w-7xl mx-auto flex flex-col gap-3">
+        <h2 className="mb-2">Entrance Detail</h2>
+        <p className="font-normal">
+          <strong className="text-gray-700">Kamera IP manzili:</strong>
+          {data.data?.name}
+        </p>
+        <p className="font-normal">
+          <strong className="text-gray-700">Xonadon raqami:</strong>
           {data.data.first_apartment_number +
             "-" +
             data.data.last_apartment_number}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Domofon login:</strong> {data.data.intercom_login}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Domofon IP manzili:</strong> {data.data.intercom_ip}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 1 }}>
-          <strong>Domofon parol:</strong> {data.data.intercom_password}
-        </Typography>
+        </p>
+        <p className="font-normal">
+          <strong className="text-gray-700">Domofon login:</strong>
+          {data.data.intercom_login}
+        </p>
+        <p className="font-normal">
+          <strong className="text-gray-700">Domofon IP manzili:</strong>
+          {data.data.intercom_ip}
+        </p>
+        <p className="font-normal">
+          <strong className="text-gray-700">Domofon parol:</strong>
+          {data.data.intercom_password}
+        </p>
         <Box sx={{ marginTop: 3, display: "flex", gap: 5 }}>
           <Button
             variant="contained"
             color="inherit"
-            onClick={() =>
-              navigate(-1)
-            }
+            onClick={() => navigate(-1)}
           >
             <ArrowBackIcon fontSize="medium" />
             Back
           </Button>
         </Box>
-      </Paper>
-      {/* <div className="px-4">
+        {/* <div className="px-4">
         <ButtonGroup variant="outlined" aria-label="Loading button group">
-          <Button variant="contained">Uylar ro'yhati</Button>
-          <Button variant="outlined">Kameralar</Button>
+        <Button variant="contained">Uylar ro'yhati</Button>
+        <Button variant="outlined">Kameralar</Button>
         
         </ButtonGroup>
-      </div> */}
-      <ListApartment data={data.data} refetch={refetch} />
+        </div> */}
+        <ListApartment data={data.data} refetch={refetch} />
+      </div>
     </div>
   );
 }

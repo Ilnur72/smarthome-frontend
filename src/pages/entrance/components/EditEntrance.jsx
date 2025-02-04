@@ -44,7 +44,7 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
             placeholder="padyez nomi"
             {...register("name")}
             required={true}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue={showEntrance.data.name}
           />
         </div>
@@ -58,7 +58,7 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
               {...register("first_apartment_number")}
               required={true}
               min={1}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
               defaultValue={showEntrance.data.first_apartment_number}
             />
           </div>
@@ -70,7 +70,7 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
               {...register("last_apartment_number")}
               required={true}
               min={1}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
               defaultValue={showEntrance.data.last_apartment_number}
             />
           </div>
@@ -84,7 +84,7 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
             {...register("intercom_ip")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue={showEntrance.data.intercom_ip}
           />
         </div>
@@ -97,7 +97,7 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
             {...register("intercom_login")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue={showEntrance.data.intercom_login}
           />
         </div>
@@ -110,7 +110,7 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
               {...register("intercom_password")}
               required={true}
               min={1}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
               defaultValue={showEntrance.data.intercom_password}
             />
             <button
@@ -132,8 +132,6 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
             onClick={() => setShowEntrance({ isOpen: false })}
             type="button"
             sx={{
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >
@@ -143,8 +141,6 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
             type="submit"
             variant="contained"
             sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
               borderRadius: "4px",
             }}
             disabled={loading}

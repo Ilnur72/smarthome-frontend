@@ -48,6 +48,10 @@ function Camera() {
         `/camera?filters[building_id]=${buildingIdFromParams}&page[offset]=${page}&page[limit]=${row}`
       )
       .then((res) => res.data)
+      .catch((e) => {
+        console.log(e.response);
+        if (e.response?.status === 401) navigate("/login");
+      })
   );
 
   async function showData(id) {

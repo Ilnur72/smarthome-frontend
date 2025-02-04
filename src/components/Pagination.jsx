@@ -14,11 +14,11 @@ export function Pagination({
   onItemsPerPageChange,
 }) {
   console.log(totalItems, itemsPerPage, currentPage);
-  
+
   const [goToPage, setGoToPage] = useState(String(currentPage));
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   console.log(totalPages);
-  
+
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
@@ -87,14 +87,14 @@ export function Pagination({
           <button
             onClick={() => handlePageChange(1)}
             disabled={currentPage === 1}
-            className="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronsLeft className="w-5 h-5" />
           </button>
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -106,7 +106,7 @@ export function Pagination({
               className={`px-3 py-1 rounded ${
                 currentPage === page
                   ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-100"
+                  : "hover:bg-gray-200"
               }`}
             >
               {page}
@@ -116,14 +116,14 @@ export function Pagination({
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
           <button
             onClick={() => handlePageChange(totalPages)}
             disabled={currentPage === totalPages}
-            className="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronsRight className="w-5 h-5" />
           </button>

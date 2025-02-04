@@ -19,6 +19,10 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
         `/entrance?filters[building_id]=${buildingId}&sort[by]=name&sort[order]=ASC`
       )
       .then((res) => res.data)
+      .catch((e) => {
+        console.log(e.response);
+        if (e.response?.status === 401) navigate("/login");
+      })
   );
 
   const handleEntranceToggle = (entrance) => {
@@ -143,11 +147,7 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
             variant="outlined"
             onClick={() => setIsOpen(false)}
             type="button"
-            // className="bg-slate-400 text-white px-4 py-2 rounded"
             sx={{
-              // paddingY: "16px",
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >
@@ -158,9 +158,6 @@ function AddCamera({ refetch, buildingId, isOpen, setIsOpen }) {
             variant="contained"
             disabled={formState.isSubmitting}
             sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
-              // paddingY: "16px",
               borderRadius: "4px",
             }}
           >
