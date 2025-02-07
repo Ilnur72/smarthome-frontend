@@ -46,7 +46,6 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
       .get("/region")
       .then((res) => res.data)
       .catch((e) => {
-        console.log(e.response);
         if (e.response?.status === 401) navigate("/login");
       })
   );
@@ -58,7 +57,6 @@ function EditBuilding({ showBuilding, setShowBuilding, refetch }) {
         .get("/operator")
         .then((res) => res.data)
         .catch((e) => {
-          console.log(e.response);
           if (e.response?.status === 401) navigate("/login");
         })
   );

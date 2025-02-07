@@ -23,7 +23,6 @@ function CameraList({ buildingId }) {
       .get(`/camera?filters[building_id]=${buildingId}`)
       .then((res) => res.data)
       .catch((e) => {
-        console.log(e.response);
         if (e.response?.status === 401) navigate("/login");
       })
   );
@@ -33,7 +32,6 @@ function CameraList({ buildingId }) {
 
     setShowCamera({ isOpen: true, data: data.data });
   }
-  console.log(data);
   return (
     <div className="overflow-x-auto border rounded-lg">
       <div className="flex justify-between items-center p-4">

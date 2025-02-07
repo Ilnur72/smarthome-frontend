@@ -21,11 +21,9 @@ function User() {
   const navigate = useNavigate();
   const [showUser, setShowUser] = React.useState({ isOpen: false });
   const [isOpen, setIsOpen] = React.useState(false);
-  console.log(currentPage, itemsPerPage);
 
   const token = loadState("token");
   const { user } = jwtDecode(token);
-  console.log(user.role);
 
   async function showData(id) {
     const { data } = await axios.get(`/user/${id}`);
@@ -51,7 +49,6 @@ function User() {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(data);
 
   React.useEffect(() => {
     refetch();

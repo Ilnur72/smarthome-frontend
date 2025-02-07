@@ -24,7 +24,6 @@ function EditCamera({ refetch, buildingId, setShowCamera, showCamera }) {
       .get(`/entrance?filters[building_id]=${buildingId}`)
       .then((res) => res.data)
       .catch((e) => {
-        console.log(e.response);
         if (e.response?.status === 401) navigate("/login");
       })
   );

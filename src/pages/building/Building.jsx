@@ -8,11 +8,13 @@ import { loadState } from "../../Utils/storage";
 import { jwtDecode } from "jwt-decode";
 import { Pagination } from "../../components/Pagination";
 import EditBuilding from "./components/EditBuilding";
+import AddBuilding from "./components/AddBuilding";
 
 function Building() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [sortBy, setSortBy] = useState("#");
+  const [isOpen, setIsOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -47,7 +49,6 @@ function Building() {
         )
         .then((res) => res.data)
         .catch((e) => {
-          console.log(e.response);
           if (e.response?.status === 401) navigate("/login");
         }),
     {
@@ -118,8 +119,9 @@ function Building() {
                 </select>
                 <button
                   onClick={() => {
-                    setShowBuilding({ isOpen: true });
-                    navigate("add-home");
+                    setIsOpen(true);
+                    // setShowBuilding({ isOpen: true });
+                    // navigate("add-home");
                   }}
                   className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                 >
@@ -137,6 +139,7 @@ function Building() {
             setShowBuilding={setShowBuilding}
             refetch={refetch}
           />
+          <AddBuilding isOpen={isOpen} setIsOpen={setIsOpen} />
           {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full">

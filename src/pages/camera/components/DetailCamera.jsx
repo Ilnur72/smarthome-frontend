@@ -20,7 +20,6 @@ function CameraDetail() {
         .get(`/camera/${cameraIdFromParams}`)
         .then((res) => res.data)
         .catch((e) => {
-          console.log(e.response);
           if (e.response?.status === 401) navigate("/login");
         })
     // {
@@ -39,6 +38,7 @@ function CameraDetail() {
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto flex flex-col gap-3">
         <div className="bg-white rounded-lg shadow-sm border-b border-gray-200 p-3">
+          <h2 className="mb-2">Camera Detail</h2>
           <p className="font-normal">
             <strong className="text-gray-700">Kamera IP manzili:</strong>
             {data.data.ip_address}

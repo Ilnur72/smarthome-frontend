@@ -13,11 +13,9 @@ export function Pagination({
   onPageChange,
   onItemsPerPageChange,
 }) {
-  console.log(totalItems, itemsPerPage, currentPage);
 
   const [goToPage, setGoToPage] = useState(String(currentPage));
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  console.log(totalPages);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {

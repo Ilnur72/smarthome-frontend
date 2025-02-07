@@ -1,8 +1,6 @@
 import React from "react";
 
 function ListEntrance({ data }) {
-  console.log(data);
-  
   return (
     <table className="w-full">
       <thead className="bg-gray-50">

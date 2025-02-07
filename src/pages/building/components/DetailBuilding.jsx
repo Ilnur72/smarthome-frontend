@@ -24,7 +24,6 @@ function BuildingDetail() {
         .get(`/building/${buildingIdFromParams}`)
         .then((res) => res.data)
         .catch((e) => {
-          console.log(e.response);
           if (e.response?.status === 401) navigate("/login");
         }),
     {
