@@ -51,7 +51,7 @@ function AddOperator({ refetch, setIsOpen, isOpen }) {
             placeholder="Shirkat nomi"
             {...register("name")}
             required={true}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -62,7 +62,7 @@ function AddOperator({ refetch, setIsOpen, isOpen }) {
             {...register("email")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -72,7 +72,7 @@ function AddOperator({ refetch, setIsOpen, isOpen }) {
             placeholder="password"
             {...register("password")}
             required={true}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div className="flex justify-between mt-4">
@@ -84,8 +84,6 @@ function AddOperator({ refetch, setIsOpen, isOpen }) {
             }}
             type="button"
             sx={{
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >
@@ -96,8 +94,6 @@ function AddOperator({ refetch, setIsOpen, isOpen }) {
             variant="contained"
             disabled={formState.isSubmitting}
             sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
               borderRadius: "4px",
             }}
           >

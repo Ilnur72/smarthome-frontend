@@ -38,7 +38,7 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
             placeholder="Shirkat nomi"
             {...register("name")}
             required={true}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue={showOperator.data.name}
           />
         </div>
@@ -50,7 +50,7 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
             {...register("email")}
             required={true}
             min={1}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue={showOperator.data.email}
           />
         </div>
@@ -74,15 +74,12 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
                 onClick={handleChangePassword}
                 type="button"
                 sx={{
-                  color: "#00BDD6FF",
-                  borderColor: "#00BDD6FF",
                   borderRadius: "4px",
                 }}
               >
                 Back
               </Button>
               <input
-                style={{ borderColor: "#00BDD6FF" }}
                 type="password"
                 placeholder="New Password"
                 {...register("password")}
@@ -110,8 +107,6 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
             type="submit"
             variant="contained"
             sx={{
-              background: "#00BDD6FF",
-              color: "#fff",
               borderRadius: "4px",
             }}
             disabled={formState.isSubmitting}
@@ -123,8 +118,6 @@ function EditOperator({ showOperator, setShowOperator, refetch }) {
             onClick={() => setShowOperator({ isOpen: false })}
             type="button"
             sx={{
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
               borderRadius: "4px",
             }}
           >

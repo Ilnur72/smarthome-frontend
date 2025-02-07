@@ -2,7 +2,7 @@
 
 import React from "react";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { LogOutIcon, Users, Building2, User } from "lucide-react";
 import { loadState } from "../Utils/storage";
 import { jwtDecode } from "jwt-decode";
@@ -43,24 +43,25 @@ function Sidebar() {
         >
           <button> Project Name</button>
         </h1>
-        <p className="text-gray-500">Category</p>
         <ul className="mt-4 flex flex-col gap-4">
           {links.map((item, index) => (
             <NavLink key={index} to={item.url}>
               {({ isActive }) => (
                 <li
-                  className={`flex items-center p-2 hover:bg-gray-200 rounded ${
-                    isActive && "bg-primary-150"
-                  }`}
+                  className={`flex items-center p-2 ${
+                    !isActive && "hover:bg-gray-100"
+                  } rounded ${isActive && "bg-blue-600"}`}
                 >
-                  {<item.img className={`${isActive && "text-primary-500"}`} />}
-                  <span className="ml-2 text-primary">{item.link}</span>
+                  {<item.img className={`${isActive && "text-white"}`} />}
+                  <span className={`ml-2 ${isActive && "text-white"}`}>
+                    {item.link}
+                  </span>
                 </li>
               )}
             </NavLink>
           ))}
           <li
-            className="flex items-center p-2 hover:bg-gray-200 rounded cursor-pointer"
+            className={`flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer`}
             onClick={handleLogout}
           >
             <LogOutIcon />

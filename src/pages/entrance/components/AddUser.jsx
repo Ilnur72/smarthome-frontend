@@ -62,7 +62,7 @@ function AddUser({
               placeholder="Ism Familya"
               {...register("fullname")}
               required={true}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -72,7 +72,7 @@ function AddUser({
               placeholder="901234567"
               {...register("phone")}
               required={true}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
