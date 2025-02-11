@@ -294,7 +294,7 @@ function AddBuilding({ isOpen, setIsOpen }) {
           <div className="flex justify-end mt-8">
             <button
               type="submit"
-              className="bg-primary-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white px-4 py-2 rounded"
               disabled={formState.isSubmitting}
             >
               {formState.isSubmitting ? "Loading..." : "Submit"}
