@@ -18,13 +18,23 @@ function CameraList({ buildingId }) {
   const token = loadState("token");
   const { user } = jwtDecode(token);
 
-  const { data, isLoading, refetch } = useQuery("camera", () =>
-    axios
-      .get(`/camera?filters[building_id]=${buildingId}`)
-      .then((res) => res.data)
-      .catch((e) => {
-        if (e.response?.status === 401) navigate("/login");
-      })
+  const { data, isLoading, refetch } = useQuery(
+    "camera",
+    () =>
+      axios
+        .get(`/camera?filters[building_id]=${buildingId}`)
+        .then((res) => res.data)
+        .catch((e) => {
+          if (e.response?.status === 401) navigate("/login");
+        }),
+    {
+      cacheTime: 0,
+      staleTime: 0,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+      enabled: !!buildingId,
+    }
   );
 
   async function showData(id) {

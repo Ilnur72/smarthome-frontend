@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Eye, Edit2, Trash2, Search, Plus } from "lucide-react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Commet } from "react-loading-indicators";
@@ -20,6 +20,7 @@ function Building() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const navigate = useNavigate();
   const [showBuilding, setShowBuilding] = useState({ isOpen: false });
+  const queryClient = useQueryClient();
 
   const token = loadState("token");
   const { user } = jwtDecode(token);
@@ -189,6 +190,8 @@ function Building() {
                       <div className="flex justify-center gap-3">
                         <button
                           onClick={() => {
+                            queryClient.invalidateQueries("building-detail");
+
                             navigate(
                               `/building/detail?buildingId=${building.id}`
                             );

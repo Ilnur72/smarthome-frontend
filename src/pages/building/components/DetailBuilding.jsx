@@ -17,7 +17,7 @@ function BuildingDetail() {
     noAttachemntCount: 0,
   });
 
-  const { data, error, isLoading, refetch } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ["building-detail", buildingIdFromParams],
     () =>
       axios
@@ -27,15 +27,22 @@ function BuildingDetail() {
           if (e.response?.status === 401) navigate("/login");
         }),
     {
+      cacheTime: 0,
+      staleTime: 0,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
       enabled: !!buildingIdFromParams,
     }
   );
+
   if (isLoading)
     return (
       <div className="flex items-center justify-center h-2/3">
         <Commet color="#00BDD6FF" size="medium" text="" textColor="" />
       </div>
     );
+  console.log(data);
   const address = data?.data.address;
   return (
     <div className="bg-gray-50">

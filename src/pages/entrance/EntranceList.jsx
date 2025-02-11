@@ -18,20 +18,33 @@ function EntranceList({ buildingId }) {
   const { user } = jwtDecode(token);
   const [showEntrance, setShowEntrance] = React.useState({ isOpen: false });
 
-  const { data, refetch, isLoading } = useQuery("entrance", () =>
-    axios
-      .get(
-        `/entrance?filters[building_id]=${buildingId}&sort[by]=created_at&sort[order]=DESC`
-      )
-      .then((res) => res.data)
+  const { data, refetch, isLoading } = useQuery(
+    "entrance",
+    () =>
+      axios
+        .get(
+          `/entrance?filters[building_id]=${buildingId}&sort[by]=created_at&sort[order]=DESC`
+        )
+        .then((res) => res.data),
+    {
+      cacheTime: 0,
+      staleTime: 0,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+      enabled: !!buildingId,
+    }
   );
 
   React.useEffect(() => {
     if (data?.data?.entrance) {
       const count = data.data.entrance.reduce((acc, entrance) => {
-        return acc + entrance.apartments.reduce((acc, item) => {
-          return acc + (item.userApartments?.length || 0);
-        }, 0);
+        return (
+          acc +
+          entrance.apartments.reduce((acc, item) => {
+            return acc + (item.userApartments?.length || 0);
+          }, 0)
+        );
       }, 0);
       setAttachemntCount(count);
     }
@@ -112,16 +125,22 @@ function EntranceList({ buildingId }) {
               <tr key={entrance.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-center">{entrance.name}</td>
                 <td className="px-6 py-4 text-center">
-                  {entrance.first_apartment_number + "-" + entrance.last_apartment_number}
+                  {entrance.first_apartment_number +
+                    "-" +
+                    entrance.last_apartment_number}
                 </td>
-                <td className="px-6 py-4 text-center">{entrance.intercom_ip}</td>
+                <td className="px-6 py-4 text-center">
+                  {entrance.intercom_ip}
+                </td>
                 <td className="px-6 py-4 text-center">{attachedCount}</td>
                 <td className="px-6 py-4 text-center">{unassignedCount}</td>
                 <td className="px-6 py-4 text-center">
                   <div className="flex justify-center gap-3">
                     <button
                       onClick={() => {
-                        navigate(`entrance/detail?entranceId=${entrance.id}&buildingId=${buildingId}`);
+                        navigate(
+                          `entrance/detail?entranceId=${entrance.id}&buildingId=${buildingId}`
+                        );
                       }}
                       className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
                     >
