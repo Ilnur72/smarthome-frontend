@@ -65,7 +65,7 @@ function EntranceList({ buildingId }) {
         setIsOpen={setIsOpen}
         isOpen={isOpen}
         lastApartmentNumber={
-          data.data?.entrance ? data.data.entrance[0]?.last_apartment_number : 1
+          data?.data?.entrance ? data.data.entrance[0]?.last_apartment_number : 1
         }
       />
       <EditEntrance
@@ -102,6 +102,9 @@ function EntranceList({ buildingId }) {
               Domofon IP
             </th>
             <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+              Domofon stream IP
+            </th>
+            <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
               Biriktirilgan
             </th>
             <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
@@ -131,6 +134,9 @@ function EntranceList({ buildingId }) {
                 </td>
                 <td className="px-6 py-4 text-center">
                   {entrance.intercom_ip}
+                </td>
+                <td className="px-6 py-4 text-center">
+                  {entrance.stream_ip}
                 </td>
                 <td className="px-6 py-4 text-center">{attachedCount}</td>
                 <td className="px-6 py-4 text-center">{unassignedCount}</td>

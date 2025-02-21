@@ -102,6 +102,17 @@ function AddEntrance({
           />
         </div>
         <div>
+          <label className="block mb-2">Stream IP manzili*</label>
+          <input
+            type="string"
+            placeholder="stream ip"
+            {...register("stream_ip")}
+            required={true}
+            min={1}
+            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+        </div>
+        <div>
           <label className="block mb-2">Password*</label>
           <input
             type="password"
