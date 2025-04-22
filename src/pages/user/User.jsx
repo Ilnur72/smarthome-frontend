@@ -32,7 +32,7 @@ function User() {
   }
 
   const { data, isLoading, refetch } = useQuery(
-    ["user", searchTerm, currentPage, itemsPerPage],
+    ["users", searchTerm, currentPage, itemsPerPage],
     () =>
       axios
         .get(

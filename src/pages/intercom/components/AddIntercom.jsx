@@ -5,29 +5,29 @@ import { closeModal } from "../../../store/slices/modalSlice";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
-function AddEntrance({
-  refetch,
-  buildingId,
-  setIsOpen,
-  isOpen,
-  lastApartmentNumber,
-}) {
+function AddIntercom({ refetch, entranceId, setIsOpen, isOpen }) {
   // const { isOpen, isClose } = useSelector((state) => state.modal);
   const { register, handleSubmit, reset, formState } = useForm();
 
   const dispatch = useDispatch();
 
   const onSubmit = async (formData) => {
-    formData.building_id = buildingId;
-    const result = await axios.post("/entrance", {
-      ...formData,
-      first_apartment_number: +formData.first_apartment_number,
-      last_apartment_number: +formData.last_apartment_number,
-    });
-    refetch();
-    reset();
-    setIsOpen(false);
+    try {
+      formData.entrance_id = entranceId;
+      const result = await axios.post("/intercom", formData);
+      refetch();
+      reset();
+      setIsOpen(false);
+    } catch (error) {
+      toast.error(
+        typeof error.response.data.message == "object"
+          ? error.response.data.message[0]
+          : error.response.data.message
+      );
+      console.log(error.response);
+    }
   };
 
   return (
@@ -45,57 +45,22 @@ function AddEntrance({
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <label className="block mb-2">Podyezd nomi*</label>
+          <label className="block mb-2">Model nomi*</label>
           <input
             type="text"
             placeholder="padyez nomi"
-            {...register("name")}
+            {...register("model")}
             required={true}
-            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-2">Kvartira raqami*</label>
-            <input
-              type="number"
-              placeholder="dan"
-              {...register("first_apartment_number")}
-              required={true}
-              min={lastApartmentNumber + 1}
-              className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-          </div>
-          <div>
-            <label className="block mb-2 opacity-0">*</label>
-            <input
-              type="number"
-              placeholder="gacha"
-              {...register("last_apartment_number")}
-              required={true}
-              min={lastApartmentNumber + 1}
-              className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-          </div>
-        </div>
-        {/* <div>
-          <label className="block mb-2">Domofon IP*</label>
-          <input
-            type="string"
-            placeholder="IP address"
-            {...register("intercom_ip")}
-            required={true}
-            min={1}
             className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
         <div>
-          <label className="block mb-2">Login*</label>
+          <label className="block mb-2">SIP manzili*</label>
           <input
             type="string"
-            placeholder="Login"
-            {...register("intercom_login")}
+            placeholder="sip"
+            {...register("sip")}
             required={true}
             min={1}
             className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -106,7 +71,57 @@ function AddEntrance({
           <input
             type="string"
             placeholder="stream ip"
-            {...register("stream_ip")}
+            {...register("stream_link")}
+            required={true}
+            min={1}
+            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block mb-2">Status*</label>
+          <select
+            {...register("status")}
+            required={true}
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
+            defaultValue=""
+          >
+            <option defaultChecked value={"active"}>
+              ACTIVE
+            </option>
+            <option value={"inactive"}>INACTIVE</option>
+            <option value={"maintenance"}>MAINTENANCE</option>
+          </select>
+        </div>
+        {/* <div>
+          <label className="block mb-2">Type*</label>
+          <select
+            {...register("status")}
+            required={true}
+            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
+            defaultValue=""
+          >
+            <option defaultChecked value={"hikvision"}>
+              HIKVISION
+            </option>
+          </select>
+        </div> */}
+        <div>
+          <label className="block mb-2">Domofon IP*</label>
+          <input
+            type="string"
+            placeholder="IP address"
+            {...register("device_ip")}
+            required={true}
+            min={1}
+            className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block mb-2">Login*</label>
+          <input
+            type="string"
+            placeholder="Login"
+            {...register("device_login")}
             required={true}
             min={1}
             className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -117,12 +132,12 @@ function AddEntrance({
           <input
             type="password"
             placeholder="*****"
-            {...register("intercom_password")}
+            {...register("device_password")}
             required={true}
             min={1}
             className="pl-2 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
-        </div> */}
+        </div>
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"
@@ -155,4 +170,4 @@ function AddEntrance({
   );
 }
 
-export default AddEntrance;
+export default AddIntercom;

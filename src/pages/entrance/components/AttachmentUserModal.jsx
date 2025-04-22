@@ -31,6 +31,7 @@ function AttachmentUser({ setIsOpen, isOpen, apartmentId }) {
       refetchOnWindowFocus: false,
     }
   );
+console.log(data);
 
   const onSubmit = async (formData) => {
     const result = await axios.post("/user-apartment", {

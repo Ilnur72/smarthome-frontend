@@ -13,8 +13,8 @@ import "./index.scss";
 import "react-toastify/dist/ReactToastify.css";
 import { loadState } from "./Utils/storage";
 const token = loadState("token");
-// axios.defaults.baseURL = "http://localhost:8070";
-axios.defaults.baseURL = "https://smart-home-production.up.railway.app"
+axios.defaults.baseURL = "http://localhost:8050";
+// axios.defaults.baseURL = "http://84.54.118.39:8920"
 if (token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
 const queryClient = new QueryClient();

@@ -76,56 +76,6 @@ function EditEntrance({ showEntrance, setShowEntrance, refetch }) {
           </div>
         </div>
 
-        <div>
-          <label className="block mb-2">Domofon IP</label>
-          <input
-            type="string"
-            placeholder="IP address"
-            {...register("intercom_ip")}
-            required={true}
-            min={1}
-            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
-            defaultValue={showEntrance.data.intercom_ip}
-          />
-        </div>
-
-        <div>
-          <label className="block mb-2">Login</label>
-          <input
-            type="string"
-            placeholder="Login"
-            {...register("intercom_login")}
-            required={true}
-            min={1}
-            className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
-            defaultValue={showEntrance.data.intercom_login}
-          />
-        </div>
-        <div>
-          <label className="block mb-2">Password</label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="*****"
-              {...register("intercom_password")}
-              required={true}
-              min={1}
-              className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
-              defaultValue={showEntrance.data.intercom_password}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2"
-            >
-              <img
-                width={20}
-                src={showPassword ? VisibilityOff : Visibility}
-                alt=""
-              />
-            </button>
-          </div>
-        </div>
         <div className="flex justify-between mt-4">
           <Button
             variant="outlined"

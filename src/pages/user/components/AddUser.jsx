@@ -14,12 +14,14 @@ function AddUser({ refetch, setIsOpen, isOpen }) {
         phone: formData.phone,
         fullname: formData.fullname,
       });
+      console.log(result.data.success);
 
       if (result.data.success) {
         refetch();
         reset();
         setIsOpen(false);
       }
+      // queryClient.invalidateQueries("user");
     } catch (error) {
       if (error.response?.data.statusCode === 400) {
         toast.error(
