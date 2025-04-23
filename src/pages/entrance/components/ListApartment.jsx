@@ -39,6 +39,9 @@ function ListApartment({ data, refetch }) {
               Telefon raqami
             </th>
             <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
+              Parkovka uchun joylar soni
+            </th>
+            <th className="px-6 py-4 text-center text-sm font-medium text-gray-500">
               Action
             </th>
           </tr>
@@ -48,7 +51,6 @@ function ListApartment({ data, refetch }) {
             <tr key={item.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 text-center">{item.number}</td>
               <td className="px-6 py-4 text-center">
-                {" "}
                 {item.userApartments.length
                   ? item.userApartments[0].user.fullname
                   : ""}
@@ -56,6 +58,11 @@ function ListApartment({ data, refetch }) {
               <td className="px-6 py-4 text-center">
                 {item.userApartments.length
                   ? item.userApartments[0].user.phone
+                  : ""}
+              </td>
+              <td className="px-6 py-4 text-center">
+                {item.userApartments.length
+                  ? item.userApartments[0].car_count
                   : ""}
               </td>
               <td className="px-6 py-4 text-center">

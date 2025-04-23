@@ -31,8 +31,10 @@ function AddUser({
         AttachmentUserIsOpen(false);
       }
     } catch (error) {
-      if (e.response?.status === 401) navigate("/login");
+      
+      if (error.response?.status === 401) navigate("/login");
       if (error.response?.data.statusCode === 400) {
+        console.log(error.response.data.message);
         toast.error(
           typeof error.response.data.message == "object"
             ? error.response.data.message[0]
@@ -70,10 +72,24 @@ function AddUser({
             <input
               type="text"
               placeholder="901234567"
-              {...register("phone")}
-              required={true}
+              {...register("phone", {
+                required: "Telefon raqami majburiy",
+                minLength: {
+                  value: 9,
+                  message: "Telefon raqami 9 ta raqamdan iborat bo'lishi kerak",
+                },
+                maxLength: {
+                  value: 9,
+                  message: "Telefon raqami 9 ta raqamdan iborat bo'lishi kerak",
+                },
+              })}
               className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
+            {formState.errors.phone && (
+              <p className="text-red-500 text-sm mt-1">
+                {formState.errors.phone.message}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex justify-between mt-4">
@@ -85,8 +101,8 @@ function AddUser({
             }}
             type="button"
             sx={{
-              color: "#00BDD6FF",
-              borderColor: "#00BDD6FF",
+              color: "#514EF3",
+              borderColor: "#514EF3",
               borderRadius: "4px",
             }}
           >
@@ -97,7 +113,7 @@ function AddUser({
             variant="contained"
             disabled={formState.isSubmitting}
             sx={{
-              background: "#00BDD6FF",
+              background: "#514EF3",
               color: "#fff",
               borderRadius: "4px",
             }}

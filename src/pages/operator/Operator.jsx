@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import AddOperator from "./components/AddOperator";
 import EditOperator from "./components/EditOprator";
 import OperatorDetail from "./components/DetailOperator";
-import { Edit2, Eye, Trash2 } from "lucide-react";
+import { Edit2, Eye, Search, Trash2 } from "lucide-react";
 import { Pagination } from "../../components/Pagination";
 import { Button } from "@mui/material";
 
@@ -16,6 +16,7 @@ function Operator() {
   const navigate = useNavigate();
   const [showOperator, setShowOperator] = React.useState({ isOpen: false });
   const [isOpen, setIsOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   async function showData(id) {
     const { data } = await axios.get(`/operator/${id}`);
@@ -55,8 +56,17 @@ function Operator() {
     <div className="min-h-screen bg-gray-50 ">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm">
-          <div className="bg-white shadow p-4 mx-auto flex justify-between items-center">
-            <h2 className="text-xl text-primary font-bold">Shirkatlar</h2>
+          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search operator..."
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-[300px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>{" "}
             <div className="flex items-center">
               <Button
                 variant="contained"
